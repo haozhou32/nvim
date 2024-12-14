@@ -98,7 +98,18 @@ return {
         -- clangd = {},
         -- rust_analyzer = {},
         pyright = {},
-        texlab = {},
+        texlab = {
+          settings = {
+            texlab = {
+              diagnostics = {
+                ignoredPatterns = {
+                  "Overfull",
+                  "Underfull",
+                },
+              },
+            },
+          },
+        },
         tinymist = {
           settings = {
             exportPdf = "onType",
