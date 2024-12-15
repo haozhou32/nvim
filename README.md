@@ -6,15 +6,17 @@
 
 ### 1. Basic
 
-| Key             |  Action                               | Mode           |
-|-----------------|---------------------------------------|----------------|
-| `<Esc>`           | stop highlighting the words           | n              |
-| `<leader>q`       | open diagnostic quickfix list         | n              |
-| `<Ctrl-h>`        | Move focus to the left window         | n              |
-| `<Ctrl-l>`        | Move focus to the right window        | n              |
-| `<Ctrl-j>`        | Move focus to the lower window        | n              |
-| `<Ctrl-k>`        | Move focus to the upper window        | n              |
-| `:cc`             | jump to the offending line            | quickfix       |
+| Key             |  Action                                 | Mode             |
+|-----------------|-----------------------------------------|------------------|
+| `<Esc>`           | stop highlighting the words             | n                |
+| `<leader>q`       | open diagnostic quickfix list           | n                |
+| `<Ctrl-h>`        | Move focus to the left window           | n                |
+| `<Ctrl-l>`        | Move focus to the right window          | n                |
+| `<Ctrl-j>`        | Move focus to the lower window          | n                |
+| `<Ctrl-k>`        | Move focus to the upper window          | n                |
+| `<Ctrl-n>`        | Move to the next buffer                 | n                |
+| `<Ctrl-p>`        | Move to the previous buffer             | n                |
+| `:cc`             | jump to the offending line              | quickfix         |
 
 ### 2. vimtex 
 
