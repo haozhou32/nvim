@@ -1,4 +1,16 @@
-### Keyboard Mappings
+## Some screening shots
+![greeter for neovim](./images/greeter.png)
+![List of Plugins](./images/lazy.png)
+![LaTeX](./images/latex.png)
+
+
+## Main References
+[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), for general neovim configuration.
+[A guide to supercharged mathematical typesetting](https://ejmastnak.com/tutorials/vim-latex/intro/), for LaTeX specific neovim configuration.
+
+
+
+## Key Mappings
 
 `<leader> = <space>`
 
@@ -182,34 +194,6 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 
 ### 14. Kicamon/running (run code)
 - :Run
-
-### Plugin lists
-```shell
-lervag/vimtex
-L3MON4D3/Luasnip
-hrsh7th/nvim-cmp
-nvim-telescope/telescope
-lsp
-
-akinsho/bufferline
-nvimdev/indentmini
-goolord/alpha-nvim
-RRethy/vim-illuminate
-tpope/vim-sleuth
-
-echasnovski/mini
-kamykn/spelunker
-
-luisiacc/gruvbox-baby
-stevearc/conform
-folke/todo-comments
-lewis6991/gitsigns
-nvim-treesitter/nvim-treesitter
-folke/which-key
-
-typst
-```
-
 
 
 ### Todo
