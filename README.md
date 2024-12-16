@@ -1,4 +1,4 @@
-## Some screening shots
+## Some screeningshots
 ![greeter for neovim](./images/greeter.png)
 ![List of Plugins](./images/lazy.png)
 ![LaTeX](./images/latex.png)
@@ -6,6 +6,8 @@
 
 ## Main References
 [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), for general neovim configuration.
+
+
 [A guide to supercharged mathematical typesetting](https://ejmastnak.com/tutorials/vim-latex/intro/), for LaTeX specific neovim configuration.
 
 
