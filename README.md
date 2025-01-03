@@ -12,7 +12,7 @@
 
 
 
-## Key Mappings
+## Keyboard Mappings
 
 `<leader> = <space>`
 
@@ -20,17 +20,18 @@
 
 ### 1. Basic
 
-| Key             |  Action                                 | Mode             |
-|-----------------|-----------------------------------------|------------------|
-| `<Esc>`           | stop highlighting the words             | n                |
-| `<leader>q`       | open diagnostic quickfix list           | n                |
-| `<Ctrl-h>`        | Move focus to the left window           | n                |
-| `<Ctrl-l>`        | Move focus to the right window          | n                |
-| `<Ctrl-j>`        | Move focus to the lower window          | n                |
-| `<Ctrl-k>`        | Move focus to the upper window          | n                |
-| `<Ctrl-n>`        | Move to the next buffer                 | n                |
-| `<Ctrl-p>`        | Move to the previous buffer             | n                |
-| `:cc`             | jump to the offending line              | quickfix         |
+| Key             |  Action                                   | Mode               |
+|-----------------|-------------------------------------------|--------------------|
+| `<Esc>`           | stop highlighting the words               | n                  |
+| `<leader>q`       | open diagnostic quickfix list             | n                  |
+| `<Ctrl-h>`        | Move focus to the left window             | n                  |
+| `<Ctrl-l>`        | Move focus to the right window            | n                  |
+| `<Ctrl-j>`        | Move focus to the lower window            | n                  |
+| `<Ctrl-k>`        | Move focus to the upper window            | n                  |
+| `<Ctrl-n>`        | Move to the next buffer                   | n                  |
+| `<Ctrl-p>`        | Move to the previous buffer               | n                  |
+| `gf`              | go to file                                | n                  |
+| `:cc`             | jump to the offending line                | quickfix           |
 
 ### 2. vimtex 
 
@@ -59,10 +60,9 @@
 | `<Ctrl><Click>`   | inverse search (on Zathura)                           | n    |
 
 
-
-- There are other key bindings and all of them are prefixed by `<localleader>l`.
 - We can also customize the conceal rules at vimtex.lua.
 - If you use Skim as the pdf reader (on Mac OS), you should open Skim and navigate to `setting > Sync` and select `PDF-Tex Sync Support`. Then set the `Preset` field to `Custom`, set the `command` field to `nvim`, and the `Arguments` field to 
+
 ```shell
 --headless -c "VimtexInverseSearch %line '$file'"
 ```
@@ -168,14 +168,27 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 -- sr)':   [S]urround [R]eplace [)] [']
 
 
-### 10. glow (markdown preview)
+### 10. obsidian 
+| Key        | Action                            | Mode |
+|------------|-----------------------------------|------|
+| `<leader>on` | create a new note                 | n    |
+| `<leader>of` |find a file in the current vault   | n    |
+| `<leader>ob` | list all backlinks                | n    |
+| `<leader>ol` | list all links                    | n    |
+| `<leader>ot` | list all notes with the tag       | n    |
+| `<leader>op` | past the image from the clipboard | n    |
+
+- MacOS users need pngpaste (brew install pngpaste) for the :ObsidianPasteImg command (<leader>op).
+- Change the _relative path_ of the vaults in obsidian.lua.
+
+### 11. glow (markdown preview)
 
 | Key        | Action           | Mode |
 |------------|------------------|------|
 | `<leader>md` | markdown preview | n    |
 
 
-### 11. typst
+### 12. typst
 
 | Key        | Action               | Mode |
 |------------|----------------------|------|
@@ -183,18 +196,18 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 | `<leader>tp` | typst preview        | n    |
 | `<leader>ts` | typst slides preview | n    |
 
-### 12. installing lsp and other tools by mason
+### 13. installing lsp and other tools by mason
 
 - put the lsp under the table of the variable `servers`
 - put other tools (e.g. formatters) under the table of mason-tool-installer.
 - re-open nvim and all the tools will be installed automatically.
 - :Mason to check the status of the tools.
 
-### 13. upgrage/uninstall plugins
+### 14. upgrade/uninstall plugins
 
 - :Lazy
 
-### 14. Kicamon/running (run code)
+### 15. Kicamon/running (run code)
 - :Run
 
 
