@@ -17,6 +17,12 @@ return {
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
+
+      -- the following function defines mathzone in latex, which requires that vimtex is installed.
+      local function in_mathzone()
+        return vim.fn["vimtex#syntax#in_mathzone"]() == 1
+      end
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -24,6 +30,15 @@ return {
           end,
         },
         completion = { completeopt = "menu,menuone,noinsert" },
+
+        enabled = function()
+          -- Disable in math zones in LaTeX files
+          local filetype = vim.bo.filetype
+          if filetype == "tex" or filetype == "latex" then
+            return not in_mathzone()
+          end
+          return true
+        end,
 
         mapping = cmp.mapping.preset.insert({
           -- Scroll the documentation window [b]ack / [f]orward

@@ -80,6 +80,22 @@ return {
   ),
 
   s(
+    { trig = "tld", snippetType = "autosnippet", dscr = "Expands 'tld' into '\\tilde{}'" },
+    fmta("\\tilde{<>}", {
+      d(1, get_visual),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "hat", snippetType = "autosnippet", dscr = "Expands 'hat' into '\\hat{}'" },
+    fmta("\\hat{<>}", {
+      d(1, get_visual),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
     { trig = "blue", dscr = "Expands 'blue' into '{\\color{blue} <>}'" },
     fmta("{\\color{blue} <>}", {
       d(1, get_visual),
