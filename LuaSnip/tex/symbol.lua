@@ -48,8 +48,28 @@ return {
     t("\\delta"),
   }),
 
+  s({ trig = ";D", snippetType = "autosnippet" }, {
+    t("\\Delta"),
+  }),
+
+  s({ trig = ";p", snippetType = "autosnippet" }, {
+    t("\\pi"),
+  }),
+
+  s({ trig = ";P", snippetType = "autosnippet" }, {
+    t("\\Pi"),
+  }),
+
   s({ trig = ";g", snippetType = "autosnippet" }, {
     t("\\gamma"),
+  }),
+
+  s({ trig = ";G", snippetType = "autosnippet" }, {
+    t("\\Gamma"),
+  }),
+
+  s({ trig = ";m", snippetType = "autosnippet" }, {
+    t("\\mu"),
   }),
 
   s({ trig = ";w", snippetType = "autosnippet" }, {
@@ -68,12 +88,40 @@ return {
     t("\\sigma"),
   }),
 
-  s({ trig = "ift", snippetType = "autosnippet" }, {
-    t("\\infty"),
+  s({ trig = ";l", snippetType = "autosnippet" }, {
+    t("\\lambda"),
   }),
 
+  s({ trig = ";L", snippetType = "autosnippet" }, {
+    t("\\Lambda"),
+  }),
+
+  s({ trig = "ift", snippetType = "autosnippet" }, {
+    t("\\infty"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "ept", snippetType = "autosnippet" }, {
+    t("\\emptyset"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "fa", snippetType = "autosnippet" }, {
+    t("\\forall"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "ex", snippetType = "autosnippet" }, {
+    t("\\exist"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "ii", snippetType = "autosnippet" }, {
+    t("\\in"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "sb", snippetType = "autosnippet" }, {
+    t("\\subset"),
+  }, { condition = tex_utils.in_mathzone }),
+
   s({ trig = "qed", snippetType = "autosnippet" }, {
-    t("\\hfill$\\squares$"),
+    t("\\hfill$\\square$"),
   }),
 
   s({ trig = "lla", snippetType = "autosnippet" }, {

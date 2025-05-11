@@ -2,6 +2,8 @@
 ![greeter for neovim](./images/greeter.png)
 ![List of Plugins](./images/lazy.png)
 ![LaTeX](./images/latex.png)
+![lua](./images/lua.png)
+![markdown](./images/markdown.png)
 
 
 ## Main References
@@ -23,7 +25,8 @@
 | Key             |  Action                                   | Mode               |
 |-----------------|-------------------------------------------|--------------------|
 | `<Esc>`           | stop highlighting the words               | n                  |
-| `<leader>q`       | open diagnostic quickfix list             | n                  |
+| `<leader>oq `     | open diagnostic quickfix list             | n                  |
+| `<leader>cq`      | close diagnostic quickfix list            | n                  |
 | `<Ctrl-h>`        | Move focus to the left window             | n                  |
 | `<Ctrl-l>`        | Move focus to the right window            | n                  |
 | `<Ctrl-j>`        | Move focus to the lower window            | n                  |
@@ -89,16 +92,20 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 
 
 
-### 5. spelnker (the Spell Checker)
+### 5. The default spell checker
 
-| Key    | Action                                     | Mode     |
-|--------|--------------------------------------------|----------|
-| `Zl`     | open a list of suggestions                 | n        |
-| `Zc`     | insert a correction                        | n        |
-| `Zg`     | add the word to the good-spell list        | n        |
-| `Zug`    | delete the word from the good-spell list   | n        |
+| Key     | Action                                                       | Mode         |
+|-------- |--------------------------------------------------------------|--------------|
+| `zs`      | toggle to enable/disable spell checker in the current buffer | n            |
+| `z=`      | open a list of suggestions                                   | n            |
+| `zg`      | add the word to the good-spell list                          | n            |
+| `zug`     | undo zg                                                      | n            |
+| `zw`      | mark word as wrong                                           | n            |
+| `zuw`     | undo zw                                                      | n            |
+| `]s`      | move to the next misspelled word                             | n            |
+| `[s`      | move to the previous misspelled word                         | n            |
 
-- There are other key bindings and all of them are prefixed by `Z`.
+
 
 ### 6. mini.comment
 | Key | Action                             | Mode |
@@ -181,14 +188,8 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 - MacOS users need pngpaste (brew install pngpaste) for the :ObsidianPasteImg command (<leader>op).
 - Change the _relative path_ of the vaults in obsidian.lua.
 
-### 11. glow (markdown preview)
 
-| Key        | Action           | Mode |
-|------------|------------------|------|
-| `<leader>md` | markdown preview | n    |
-
-
-### 12. typst
+### 11. typst
 
 | Key        | Action               | Mode |
 |------------|----------------------|------|
@@ -196,18 +197,19 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 | `<leader>tp` | typst preview        | n    |
 | `<leader>ts` | typst slides preview | n    |
 
-### 13. installing lsp and other tools by mason
+
+### 12. installing lsp and other tools by mason
 
 - put the lsp under the table of the variable `servers`
 - put other tools (e.g. formatters) under the table of mason-tool-installer.
 - re-open nvim and all the tools will be installed automatically.
 - :Mason to check the status of the tools.
 
-### 14. upgrade/uninstall plugins
+### 13. upgrade/uninstall plugins
 
 - :Lazy
 
-### 15. Kicamon/running (run code)
+### 14. Kicamon/running (run code)
 - :Run
 
 

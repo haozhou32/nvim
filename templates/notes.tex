@@ -1,0 +1,126 @@
+\documentclass[11pt,a4paper]{article}
+
+% Import some standard packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage[a4paper, hmargin={3cm,3cm}]{geometry} 
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{latexsym}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{dsfont}
+\usepackage{ifthen}
+\usepackage{caption}
+\usepackage{tikz, tikz-cd, pgfplots} 
+\pgfplotsset{compat=1.18}
+\usepackage[natbibapa]{apacite}
+
+% Allowing hyperref
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+% For cross-referencing theorems, etc. using \lable{} and \cref{}
+\usepackage[capitalize]{cleveref} 
+
+% Fixes itemize
+\usepackage{enumitem}
+\setlist{itemsep = 0.2em, topsep = 0.4em}
+\renewcommand\labelitemi{\raisebox{0.15em}{\tiny$\bullet$}}
+
+% Defaut environment setting without colorbox.
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{proposition}{Proposition}[section]
+% \newtheorem{lemma}{Lemma}[section]
+% \newtheorem{corollary}{Corollary}[section]
+% \newtheorem{definition}{Definition}[section]
+% \newtheorem{example}{Example}[section]
+% \newtheorem{algorithm}{Algorithm}
+% \newtheorem{exercise}{Exercise}
+% \newtheorem{solution}{Solution}
+% \newtheorem{remark}{Remark}
+% \newtheorem{assumption}{Assumption}
+% \newtheorem{proof}{Proof}
+
+% theorem boxes
+\usepackage{thmtools}
+\usepackage[framemethod = TikZ]{mdframed}
+\usepackage{silence} % for suppressing warnings 
+\WarningFilter{mdframed}{You got a bad break}
+
+\mdfsetup{
+	linewidth = 0.3mm,
+	innertopmargin = 2mm,
+	innerbottommargin = 3.5mm,
+	innerleftmargin = 3mm,
+	innerrightmargin = 3mm
+} % adjusts boundaries of boxes
+
+\newcommand{\thmboxstyle}[4]{
+	\mdfdefinestyle{#2}{
+		linecolor = #3,
+		backgroundcolor = #4,
+		nobreak = true
+	}
+	\declaretheoremstyle[
+		headfont = \sffamily\bfseries\color{#3},
+		mdframed = {style = #2},
+		headpunct = {\\[0.4pt]},
+		postheadspace = {0pt},
+	]{#1}
+}
+
+% five different colors of boxes
+\thmboxstyle{defbox}{mdredbox}{red}{orange!5}
+\thmboxstyle{thmbox}{mdbluebox}{blue!90!red}{cyan!4}
+\thmboxstyle{exbox}{mdgreenbox}{green!70!black}{teal!4}
+\thmboxstyle{notebox}{mdorangebox}{orange!50!brown}{yellow!5!olive!5}
+\thmboxstyle{lembox}{mdpurplebox}{purple!50!blue}{purple!5!blue!3}
+
+\declaretheorem[style = thmbox, name = Theorem, numberwithin = section]{theorem}
+\declaretheorem[style = lembox, name = Lemma, numberwithin = section]{lemma}
+\declaretheorem[style = thmbox, name = Proposition, numberwithin = section]{proposition}
+\declaretheorem[style = lembox, name = Corollary, numberwithin = section]{corollary}
+\declaretheorem[style = defbox, name = Definition, numberwithin = section]{definition}
+
+\declaretheorem[style = thmbox, name = Theorem, numbered = no]{theorem*}
+\declaretheorem[style = lembox, name = Lemma, numbered = no]{lemma*}
+\declaretheorem[style = thmbox, name = Proposition, numbered = no]{proposition*}
+\declaretheorem[style = lembox, name = Corollary, numbered = no]{corollary*}
+\declaretheorem[style = defbox, name = Definition, numbered = no]{definition*}
+
+\declaretheorem[style = exbox, name = Example, numberwithin = section]{example}
+\declaretheorem[style = exbox, name = Example, numbered = no]{example*}
+\declaretheorem[style = exbox, name = Problem, numberwithin = section]{problem}
+\declaretheorem[style = exbox, name = Problem, numbered = no]{problem*}
+
+\declaretheorem[style = notebox, name = Fact, numberwithin = section]{fact}
+\declaretheorem[style = notebox, name = Fact, numbered = no]{fact*}
+
+\declaretheorem[style = plain, name = Question, numberwithin = section]{question}
+\declaretheorem[style = plain, name = Question, numbered = no]{question*}
+
+
+\setcounter{MaxMatrixCols}{10}
+\parskip=.1in
+\setstretch{1.3}
+
+
+\title{ Title}
+\author{ }
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+This template is used for making lecture notes and other random text.
+\section{Introduction}
+\subsection{subsection}
+
+
+\newpage
+\bibliographystyle{apacite}
+\bibliography{refs}
+\end{document}
+

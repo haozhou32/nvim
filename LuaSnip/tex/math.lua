@@ -11,65 +11,86 @@ local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
 local tex_utils = {}
-tex_utils.in_mathzone = function()  -- math context detection
-  return vim.fn['vimtex#syntax#in_mathzone']() == 1
+tex_utils.in_mathzone = function() -- math context detection
+  return vim.fn["vimtex#syntax#in_mathzone"]() == 1
 end
 tex_utils.in_text = function()
   return not tex_utils.in_mathzone()
 end
-tex_utils.in_comment = function()  -- comment detection
-  return vim.fn['vimtex#syntax#in_comment']() == 1
+tex_utils.in_comment = function() -- comment detection
+  return vim.fn["vimtex#syntax#in_comment"]() == 1
 end
-tex_utils.in_env = function(name)  -- generic environment detection
-    local is_inside = vim.fn['vimtex#env#is_inside'](name)
-    return (is_inside[1] > 0 and is_inside[2] > 0)
+tex_utils.in_env = function(name) -- generic environment detection
+  local is_inside = vim.fn["vimtex#env#is_inside"](name)
+  return (is_inside[1] > 0 and is_inside[2] > 0)
 end
 -- A few concrete environments---adapt as needed
-tex_utils.in_equation = function()  -- equation environment detection
-    return tex_utils.in_env('equation')
+tex_utils.in_equation = function() -- equation environment detection
+  return tex_utils.in_env("equation")
 end
-tex_utils.in_itemize = function()  -- itemize environment detection
-    return tex_utils.in_env('itemize')
+tex_utils.in_itemize = function() -- itemize environment detection
+  return tex_utils.in_env("itemize")
 end
-tex_utils.in_tikz = function()  -- TikZ picture environment detection
-    return tex_utils.in_env('tikzpicture')
+tex_utils.in_tikz = function() -- TikZ picture environment detection
+  return tex_utils.in_env("tikzpicture")
 end
 
 return {
 
-  s({trig = "intt", snippetType = "autosnippet", dscr="integral"},
+  s(
+    { trig = "intt", snippetType = "autosnippet", dscr = "integral" },
     fmta(
       [[ 
         \int_{<>}^{<>} <> \mathrm{d}<>
       ]],
       {
-        i(1,"from"),
-        i(2,"to"),
-        i(3,"f(x)"),
-        i(4,"x")
+        i(1, "from"),
+        i(2, "to"),
+        i(3, "f(x)"),
+        i(4, "x"),
       }
-     ),
+    ),
     { condition = tex_utils.in_mathzone }
   ),
 
-  s({trig = "arr", snippetType = "autosnippet", dscr="array"},
+  s(
+    { trig = "mtx", snippetType = "autosnippet", dscr = "bmatrix" },
+    fmta(
+      [[ 
+	\begin{bmatrix}
+		<> & <> \\
+		<> & <>
+	\end{bmatrix}
+      ]],
+      {
+        i(1, "a"),
+        i(2, "b"),
+        i(3, "c"),
+        i(4, "d"),
+      }
+    ),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "arr", snippetType = "autosnippet", dscr = "array" },
     fmta(
       [[
         <> = \left\{\begin{array}{lll} <> &\text{if } <> \\ <> &\text{<>} <> \end{array}\right.
       ]],
       {
-        i(1,"f(x)"),
-        i(2,"1"),
-        i(3,"1"),
-        i(4,"0"),
-        i(5,"otherwise"),
-        i(6)
+        i(1, "f(x)"),
+        i(2, "1"),
+        i(3, "1"),
+        i(4, "0"),
+        i(5, "otherwise"),
+        i(6),
       }
-     ),
+    ),
     { condition = tex_utils.in_mathzone }
   ),
 
-s(
+  s(
     { trig = "([%a%)%]%}])(%d)", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta("<>_<>", {
       f(function(_, snip)
@@ -82,23 +103,23 @@ s(
     { condition = tex_utils.in_mathzone }
   ),
 
--- s(
---     { trig = "([%a%)%]%}])_(%d)(%d)", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
---     fmta("<>_{<><>}", {
---       f(function(_, snip)
---         return snip.captures[1]
---       end),
---       f(function(_, snip)
---         return snip.captures[2]
---       end),
---       f(function(_, snip)
---         return snip.captures[3]
---       end),
---     }),
---     { condition = tex_utils.in_mathzone }
---   ),
+  -- s(
+  --     { trig = "([%a%)%]%}])_(%d)(%d)", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+  --     fmta("<>_{<><>}", {
+  --       f(function(_, snip)
+  --         return snip.captures[1]
+  --       end),
+  --       f(function(_, snip)
+  --         return snip.captures[2]
+  --       end),
+  --       f(function(_, snip)
+  --         return snip.captures[3]
+  --       end),
+  --     }),
+  --     { condition = tex_utils.in_mathzone }
+  --   ),
 
-s(
+  s(
     { trig = "([%a%)%]%}])(%a)%2", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 100 },
     fmta("<>_<>", {
       f(function(_, snip)
@@ -111,45 +132,45 @@ s(
     { condition = tex_utils.in_mathzone }
   ),
 
--- s(
---     { trig = "([%a%)%]%}])_(%a)(%a)%3", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
---     fmta("<>_{<><>}", {
---       f(function(_, snip)
---         return snip.captures[1]
---       end),
---       f(function(_, snip)
---         return snip.captures[2]
---       end),
---       f(function(_, snip)
---         return snip.captures[3]
---       end),
---     }),
---     { condition = tex_utils.in_mathzone }
---   ),
+  -- s(
+  --     { trig = "([%a%)%]%}])_(%a)(%a)%3", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
+  --     fmta("<>_{<><>}", {
+  --       f(function(_, snip)
+  --         return snip.captures[1]
+  --       end),
+  --       f(function(_, snip)
+  --         return snip.captures[2]
+  --       end),
+  --       f(function(_, snip)
+  --         return snip.captures[3]
+  --       end),
+  --     }),
+  --     { condition = tex_utils.in_mathzone }
+  --   ),
 
-s(
+  s(
     { trig = "([%a%)%]%}])uu", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta("<>^{<>}", {
       f(function(_, snip)
         return snip.captures[1]
       end),
-      i(1)
+      i(1),
     }),
     { condition = tex_utils.in_mathzone }
   ),
 
-s(
+  s(
     { trig = "([%a%)%]%}])ll", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta("<>_{<>}", {
       f(function(_, snip)
         return snip.captures[1]
       end),
-      i(1)
+      i(1),
     }),
     { condition = tex_utils.in_mathzone }
   ),
 
- s(
+  s(
     { trig = "sum", snippetType = "autosnippet" },
     c(1, {
       sn(nil, { t("\\sum\\limits_{"), i(1), t("} ") }),
@@ -167,7 +188,7 @@ s(
     { condition = tex_utils.in_mathzone }
   ),
 
-s(
+  s(
     { trig = "lim", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta("\\lim_{<>}", {
       i(1),
@@ -175,8 +196,8 @@ s(
     { condition = tex_utils.in_mathzone }
   ),
 
-s(
-    { trig = "cap", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
+  s(
+    { trig = "bcap", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
     fmta("\\bigcap\\limits_{<>}^{<>}", {
       i(1),
       i(2),
@@ -185,7 +206,16 @@ s(
   ),
 
   s(
-    { trig = "cup", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
+    { trig = "scup", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
+    fmta("\\bigsqcup\\limits_{<>}^{<>}", {
+      i(1),
+      i(2),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "bcup", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
     fmta("\\bigcup\\limits_{<>}^{<>}", {
       i(1),
       i(2),
@@ -193,6 +223,51 @@ s(
     { condition = tex_utils.in_mathzone }
   ),
 
+  s(
+    { trig = ";{", snippetType = "autosnippet" },
+    fmta("\\{ <> \\}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
 
+  s(
+    { trig = "b;{", snippetType = "autosnippet", priority = 100 },
+    fmta("\\left\\{ <> \\right\\}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
 
+  s(
+    { trig = ";(", snippetType = "autosnippet" },
+    fmta("( <> )", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "b;(", snippetType = "autosnippet" },
+    fmta("\\left( <> \\right)", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = ";[", snippetType = "autosnippet" },
+    fmta("[ <> ]", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "b;[", snippetType = "autosnippet" },
+    fmta("\\left[ <> \\right]", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
 }

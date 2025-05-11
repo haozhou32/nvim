@@ -31,13 +31,15 @@ vim.opt.scrolloff = 10
 vim.o.showmatch = true
 vim.o.matchtime = 3
 vim.g.maplocalleader = "\\"
+vim.opt.spelloptions = "camel"
 
 --NOTE: [[ Basic Keymaps ]]
 
 --  See `:help vim.keymap.set()`
 vim.keymap.set("i", "jk", "<ESC>")
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>oq", vim.diagnostic.setloclist, { desc = "[O]pen diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>cq", ":lclose<CR>", { desc = "[C]lose diagnostic [Q]uickfix list" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -61,6 +63,17 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Move focus to the [N]ext buffer" })
 vim.keymap.set("n", "<C-p>", ":bprevious<CR>", { desc = "Move focus to the [P]revious buffer " })
 
+-- Toggle spell checking
+vim.keymap.set("n", "zs", function()
+  if vim.wo.spell then
+    vim.wo.spell = false
+    print("Spell checking disabled")
+  else
+    vim.wo.spell = true
+    print("Spell checking enabled")
+  end
+end, { desc = "Toggle spell checking" })
+
 --NOTE: [[ Basic Autocommands ]]
 
 --  See `:help lua-guide-autocommands`
@@ -80,6 +93,7 @@ function _G.select_template()
     article = "~/.config/nvim/templates/article.tex",
     beamer = "~/.config/nvim/templates/beamer.tex",
     book = "~/.config/nvim/templates/book.tex",
+    notes = "~/.config/nvim/templates/notes.tex",
   }
   local items = {}
   for k, _ in pairs(templates) do

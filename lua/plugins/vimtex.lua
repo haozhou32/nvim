@@ -43,8 +43,8 @@ return {
         callback = function()
           local conceal_rules = {
             { "\\\\limits", " " },
-            { "\\\\Longrightarrow", "⟹  " },
-            { "\\\\Longleftarrow", "⟸  " },
+            { "\\\\Longrightarrow", "⟹ " },
+            { "\\\\Longleftarrow", "⟸ " },
             { "\\\\iff", "⇔" },
           }
           for _, rule in ipairs(conceal_rules) do
