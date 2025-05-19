@@ -200,8 +200,8 @@ return {
       [[
          \begin{figure}[h]
            \centering
-           \includegraphics[scale = <>](<>)
-           \caption(<>)
+           \includegraphics[scale = <>]{<>}
+           \caption{<>}
          \end{figure}
       ]],
       { i(1), i(2), i(3, "name of the figure") }

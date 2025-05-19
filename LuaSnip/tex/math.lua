@@ -197,6 +197,70 @@ return {
   ),
 
   s(
+    { trig = "max", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\max\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "min", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\min\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "amx", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\argmax\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "amn", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\argmin\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "sup", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\sup\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "inf", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\inf\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "lsp", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\limsup\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
+    { trig = "lif", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta("\\liminf\\limits_{<>}", {
+      i(1),
+    }),
+    { condition = tex_utils.in_mathzone }
+  ),
+
+  s(
     { trig = "bcap", regTrig = true, wordTrig = false, snippetType = "autosnippet", priority = 2000 },
     fmta("\\bigcap\\limits_{<>}^{<>}", {
       i(1),

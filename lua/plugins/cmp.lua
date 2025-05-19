@@ -45,6 +45,7 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           -- ["<C-Space>"] = cmp.mapping.complete({}),
+
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               if luasnip.expandable() then
@@ -57,15 +58,15 @@ return {
             else
               fallback()
             end
-          end),
+          end, { "i", "s" }), -- To let this logic applies to command mode, add "c" into { }
 
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
+            elseif luasnip.jumpable(1) then
+              luasnip.jump(1)
             elseif has_words_before() then
-              cmp.complete()
+              cmp.complete() -- manually trigger the completion process
             else
               fallback()
             end

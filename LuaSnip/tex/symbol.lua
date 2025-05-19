@@ -84,6 +84,10 @@ return {
     t("\\theta"),
   }),
 
+  s({ trig = ";Th", snippetType = "autosnippet" }, {
+    t("\\Theta"),
+  }),
+
   s({ trig = ";s", snippetType = "autosnippet" }, {
     t("\\sigma"),
   }),
@@ -134,5 +138,9 @@ return {
 
   s({ trig = "llra", snippetType = "autosnippet" }, {
     t("\\Longleftrightarrow"),
+  }, { condition = tex_utils.in_mathzone }),
+
+  s({ trig = "rra", snippetType = "autosnippet" }, {
+    t("\\rightrightarrows"),
   }, { condition = tex_utils.in_mathzone }),
 }
