@@ -4,7 +4,14 @@ return {
     lazy = false,
     -- tag = "v2.15", -- uncomment to pin to a specific release
     init = function()
-      vim.g.vimtex_view_method = "zathura"
+      -- vim.g.vimtex_view_method = "zathura"
+      if vim.uv.os_uname().sysname == "Darwin" then
+        vim.g.vimtex_view_method = "skim"
+        vim.g.vimtex_view_skim_sync = 1
+      elseif vim.uv.os_uname().sysname == "Linux" then
+        vim.g.vimtex_view_method = "zathura"
+      end
+
       vim.g.vimtex_imaps_enabled = 0
       vim.g.vimtex_toc_config = {
         split_width = 30,
