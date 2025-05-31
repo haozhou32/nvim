@@ -6,7 +6,7 @@ return {
     init = function()
       -- vim.g.vimtex_view_method = "zathura"
       if vim.uv.os_uname().sysname == "Darwin" then
-        vim.g.vimtex_view_method = "skim"
+        vim.g.vimtex_view_method = "sioyek" -- or "skim"
         vim.g.vimtex_view_skim_sync = 1
       elseif vim.uv.os_uname().sysname == "Linux" then
         vim.g.vimtex_view_method = "zathura"

@@ -61,6 +61,7 @@
 | `[(])r(R)`        | jump to the next (previous) frame                     | nxo  |
 | `<localleader>lv` | forward search                                        | n    |
 | `<Ctrl><Click>`   | inverse search (on Zathura)                           | n    |
+| `<RightClick>`    | inverse search (on Sioyek)                            | n    |
 
 
 - We can also customize the conceal rules at vimtex.lua.
