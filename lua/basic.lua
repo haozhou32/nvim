@@ -62,6 +62,7 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 -- Navigate buffers
 vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Move focus to the [N]ext buffer" })
 vim.keymap.set("n", "<C-p>", ":bprevious<CR>", { desc = "Move focus to the [P]revious buffer " })
+vim.keymap.set("n", "<C-q>", ":bd<CR>", { desc = "Close current buffer" })
 
 -- Toggle spell checking
 vim.keymap.set("n", "zs", function()

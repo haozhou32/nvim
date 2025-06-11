@@ -33,6 +33,7 @@
 | `<Ctrl-k>`        | Move focus to the upper window            | n                  |
 | `<Ctrl-n>`        | Move to the next buffer                   | n                  |
 | `<Ctrl-p>`        | Move to the previous buffer               | n                  |
+| `<Ctrl-q>`        | Close the current buffer                  | n                  |
 | `gf`              | go to file                                | n                  |
 | `:cc`             | jump to the offending line                | quickfix           |
 
@@ -176,11 +177,18 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 -- sr)':   [S]urround [R]eplace [)] [']
 
 
-### 10. obsidian 
+### 10. mini.file
+| Key       | Action                                                    | Mode |
+|-----------|-----------------------------------------------------------|------|
+| `<leader>b` | open mini.file w.r.t. the current buffer                  | n    |
+| `<leader>B` | open mini.file w.r.t. the current working directory       | n    |
+
+
+### 11. obsidian 
 | Key        | Action                            | Mode |
 |------------|-----------------------------------|------|
 | `<leader>on` | create a new note                 | n    |
-| `<leader>of` |find a file in the current vault   | n    |
+| `<leader>of` | find a file in the current vault  | n    |
 | `<leader>ob` | list all backlinks                | n    |
 | `<leader>ol` | list all links                    | n    |
 | `<leader>ot` | list all notes with the tag       | n    |
@@ -190,7 +198,7 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 - Change the _relative path_ of the vaults in obsidian.lua.
 
 
-### 11. typst
+### 12. typst
 
 | Key        | Action               | Mode |
 |------------|----------------------|------|
@@ -199,18 +207,18 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 | `<leader>ts` | typst slides preview | n    |
 
 
-### 12. installing lsp and other tools by mason
+### 13. installing lsp and other tools by mason
 
 - put the lsp under the table of the variable `servers`
 - put other tools (e.g. formatters) under the table of mason-tool-installer.
 - re-open nvim and all the tools will be installed automatically.
 - :Mason to check the status of the tools.
 
-### 13. upgrade/uninstall plugins
+### 14. upgrade/uninstall plugins
 
 - :Lazy
 
-### 14. Kicamon/running (run code)
+### 15. Kicamon/running (run code)
 - :Run
 
 

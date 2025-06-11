@@ -8,6 +8,29 @@ return {
       if vim.uv.os_uname().sysname == "Darwin" then
         vim.g.vimtex_view_method = "sioyek" -- or "skim"
         vim.g.vimtex_view_skim_sync = 1
+        -- -- Sioyek-specific refresh fix for macOS. Uncomment the following lines if Sioyek does not refresh automatically.
+        -- -- Function to notify Sioyek
+        -- local function notify_sioyek()
+        --   -- Get the current buffer's vimtex table
+        --   local vimtex = vim.b.vimtex
+        --   if vimtex and vimtex.out then
+        --     local pdf_file = vimtex.out()
+        --     -- Check if PDF file exists
+        --     if vim.fn.filereadable(pdf_file) == 1 then
+        --       -- Touch the PDF file to trigger Sioyek's file watcher
+        --       vim.defer_fn(function()
+        --         vim.fn.system("touch " .. vim.fn.shellescape(pdf_file))
+        --       end, 200) -- 200ms delay
+        --     end
+        --   end
+        -- end
+        -- -- Create autocommand for VimtexEventCompileSuccess
+        -- vim.api.nvim_create_augroup("vimtex_sioyek", { clear = true })
+        -- vim.api.nvim_create_autocmd("User", {
+        --   group = "vimtex_sioyek",
+        --   pattern = "VimtexEventCompileSuccess",
+        --   callback = notify_sioyek,
+        -- })
       elseif vim.uv.os_uname().sysname == "Linux" then
         vim.g.vimtex_view_method = "zathura"
       end
@@ -16,6 +39,25 @@ return {
       vim.g.vimtex_toc_config = {
         split_width = 30,
         show_help = 0,
+      }
+
+      -- Configure VimTeX compiler
+      vim.g.vimtex_compiler_latexmk = {
+        build_dir = "",
+        callback = 1,
+        continuous = 1,
+        executable = "latexmk",
+        hooks = {},
+        options = {
+          "-verbose",
+          "-file-line-error",
+          "-synctex=1",
+          "-interaction=nonstopmode",
+          "-pdf",
+          "-pvc",
+          "-pvctimeout-",
+          "-view=none",
+        },
       }
 
       -- Some quickfix configuration

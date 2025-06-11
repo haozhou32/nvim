@@ -1,7 +1,11 @@
 return {
   {
     "akinsho/bufferline.nvim",
-    config = true,
+    opts = {
+      options = {
+        themable = true, -- Let the colorscheme handle the styling
+      },
+    },
   },
 
   {
