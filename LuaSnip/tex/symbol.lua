@@ -52,6 +52,14 @@ return {
     t("\\Delta"),
   }),
 
+  s({ trig = ";e", snippetType = "autosnippet" }, {
+    t("\\epsilon"),
+  }),
+
+  s({ trig = ";n", snippetType = "autosnippet" }, {
+    t("\\eta"),
+  }),
+
   s({ trig = ";p", snippetType = "autosnippet" }, {
     t("\\pi"),
   }),
@@ -80,16 +88,28 @@ return {
     t("\\Omega"),
   }),
 
-  s({ trig = ";th", snippetType = "autosnippet" }, {
+  s({ trig = ";o", snippetType = "autosnippet" }, {
     t("\\theta"),
   }),
 
-  s({ trig = ";Th", snippetType = "autosnippet" }, {
+  s({ trig = ";O", snippetType = "autosnippet" }, {
     t("\\Theta"),
   }),
 
   s({ trig = ";s", snippetType = "autosnippet" }, {
     t("\\sigma"),
+  }),
+
+  s({ trig = ";S", snippetType = "autosnippet" }, {
+    t("\\Sigma"),
+  }),
+
+  s({ trig = ";t", snippetType = "autosnippet" }, {
+    t("\\tau"),
+  }),
+
+  s({ trig = ";r", snippetType = "autosnippet" }, {
+    t("\\rho"),
   }),
 
   s({ trig = ";l", snippetType = "autosnippet" }, {
