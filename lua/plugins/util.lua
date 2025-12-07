@@ -6,6 +6,13 @@ return {
     config = true,
   },
 
+  -- Swtich to the default input method (English) when entering insertmode.
+  {
+    "keaising/im-select.nvim",
+    config = function()
+      require("im_select").setup({})
+    end,
+  },
   -- {
   --   "kamykn/spelunker.vim",
   --   -- enter "ZL"/"Zl" to open a list of suggestions,

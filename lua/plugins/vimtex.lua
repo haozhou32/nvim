@@ -119,6 +119,7 @@ return {
           "nav",
           "vrb",
           "synctex.gz",
+          "xdv",
         }
 
         local current_dir = vim.fn.expand("%:p:h")
