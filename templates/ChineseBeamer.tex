@@ -1,0 +1,55 @@
+%!TEX program = xelatex
+%!TEX view = sioyek
+\documentclass{beamer}
+\usepackage{ctex}
+\mode<presentation>
+{
+  \usetheme{CambridgeUS}  % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[natbibapa]{apacite}
+
+\title{用neovim写中文Beamer}
+
+\author{作者}
+\institute{大学}
+
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\section{章节名}
+\begin{frame}{主题名}
+
+\begin{itemize}
+\item 使用xelatex编译
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{主题名}
+  \begin{block}{定义}
+    \textbf{(定义)}
+  \end{block}
+\end{frame}
+
+% \bibliography{refs}  % without .bib extension
+% \bibliographystyle{apacite}  % or your preferred style
+
+
+
+
+
+
+
+\end{document}

@@ -89,33 +89,82 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 --NOTE: insert latex templates
-function _G.select_template()
-  local templates = {
-    article = "~/.config/nvim/templates/article.tex",
-    beamer = "~/.config/nvim/templates/beamer.tex",
-    book = "~/.config/nvim/templates/book.tex",
-    notes = "~/.config/nvim/templates/notes.tex",
-  }
-  local items = {}
-  for k, _ in pairs(templates) do
-    table.insert(items, k)
+
+-- 1. Define the function globally, but DO NOT require telescope at the top level.
+function _G.select_template_telescope()
+  -- 2. Try to load telescope ONLY when the function is actually called.
+  local status_ok, pickers = pcall(require, "telescope.pickers")
+  if not status_ok then
+    print("Telescope not found or not loaded yet.")
+    return
   end
 
-  vim.ui.select(items, {
-    prompt = "Select template:",
-  }, function(choice)
-    if choice then
-      vim.cmd("0r " .. templates[choice])
-    end
-  end)
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local previewers = require("telescope.previewers")
+
+  local home = os.getenv("HOME")
+  local templates = {
+    { name = "Article", path = home .. "/.config/nvim/templates/article.tex" },
+    { name = "Beamer", path = home .. "/.config/nvim/templates/beamer.tex" },
+    { name = "Book", path = home .. "/.config/nvim/templates/book.tex" },
+    { name = "Notes", path = home .. "/.config/nvim/templates/notes.tex" },
+    { name = "ChineseArticle", path = home .. "/.config/nvim/templates/ChineseArticle.tex" },
+    { name = "ChineseBeamer", path = home .. "/.config/nvim/templates/ChineseBeamer.tex" },
+  }
+
+  pickers
+    .new({}, {
+      prompt_title = "LaTeX Templates",
+      finder = finders.new_table({
+        results = templates,
+        entry_maker = function(entry)
+          return {
+            value = entry,
+            display = entry.name,
+            ordinal = entry.name,
+            path = entry.path,
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+      previewer = previewers.new_buffer_previewer({
+        define_preview = function(self, entry, status)
+          conf.buffer_previewer_maker(entry.path, self.state.bufnr, {
+            bufname = self.state.bufname,
+            winid = self.state.winid,
+          })
+        end,
+      }),
+      attach_mappings = function(prompt_bufnr, map)
+        actions.select_default:replace(function()
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          if selection then
+            vim.cmd("0r " .. selection.value.path)
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
+-- 3. Create the Autocommand
 vim.api.nvim_create_autocmd({ "BufNewFile" }, {
   pattern = "*.tex",
-  callback = select_template,
+  callback = function()
+    -- Use vim.schedule to wait until the UI is ready and plugins are loaded
+    vim.schedule(function()
+      _G.select_template_telescope()
+    end)
+  end,
 })
 
-vim.api.nvim_create_user_command("TexTemplate", select_template, {}) -- Manually open a template.
+-- 4. Create the User Command
+vim.api.nvim_create_user_command("TexTemplate", _G.select_template_telescope, {})
 
 --NOTE: Markdown table formatter
 vim.keymap.set("n", "<leader>ta", function()

@@ -218,7 +218,13 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 
 - :Lazy
 
-### 15. Kicamon/running (run code)
+### 15. Chinese input supports
+- [Require additonal commandline tools](https://github.com/keaising/im-select.nvim?tab=readme-ov-file)
+- These commandline tools (im-select/macism) ensure that the input method is English.
+- For editing LaTeX files, choose ChineseArticle.tex or ChineseBeamer.tex as the template. They contain the magic comments:"%!TEX program = xelatex" and "%!TEX view = sioyek". The second one is not essential and one should delete it if the OS doesn't have sioyek been installed.
+
+
+### 16. Kicamon/running (run code)
 - :Run
 
 
