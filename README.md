@@ -46,14 +46,6 @@
 | `<localleader>lx` | clean the auxiliary files (must stop compiling first) | n    |
 | `<localleader>lt` | open table of contents                                | n    |
 | `<localleader>lw` | count words                                           | n    |
-| `d(c)se`          | delete (change) surrounding environments              | n    |
-| `d(c)sc`          | delete (change) surrounding commands                  | n    |
-| `d(c)sd`          | delete (change) surrounding delimiters                | n    |
-| `d(c)sm`          | delete (change) surrounding math                      | n    |
-| `tsc(e)`          | toggle starred commands and environments              | n    |
-| `tsm`             | toggle inline and display math                        | n    | 
-| `tsd`             | toggle surrounding delimiters                         | n    |
-| `tsf`             | toggle surrounding fractions                          | n    |
 | `%`               | move between matching delimiters                      | nxo  |
 | `]]`              | jump to the next section                              | nxo  |
 | `[[`              | jump to the beginning of the current section          | nxo  |
@@ -144,37 +136,7 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 
 
 ### 9. mini.surround (text-object)
-- nvim's built in text object commands has the following form:
-  
-  verb + select type + text object type 
-
-| verb | select type | text object type                               |
-|------|-------------|------------------------------------------------|
-| v    | a (around)  | w (word)                                       |
-| c    | i (inside)  | W (word omitting any characters except <space> |
-| d    |             | s (sentence)                                   |
-| y    |             | p (paragraph)                                  |
-|      |             | surroundings                                   |
-|      |             | t (html tag)                                   |
-|      |             | f (function)                                   |
-
-- There are more text object types provided by vimtex.
-
-| Key  | Text object                              |
-|------|------------------------------------------|
-| c    | Latex commands (\textbf{})               |
-| d    | delimiters ([])                          |
-| e    | Latex environments (\begin{} ... \end{}) |
-| m    | inline math ($...$)                      |
-| P    | sections                                 |
-| i    | items in _itemize_ and _enumerate_           |
-
-
-- add/delete/replace surroundings (brackets, quotes, etc.
-
--- saiw):  [S]urround [A]dd [I]nner [W]ord [)]Paren
--- sd':    [S]urround [D]elete [']quotes
--- sr)':   [S]urround [R]eplace [)] [']
+- See ![How to master text-object](./docs/text-objects.md)
 
 
 ### 10. mini.file
@@ -222,10 +184,6 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 - [Require additonal commandline tools](https://github.com/keaising/im-select.nvim?tab=readme-ov-file)
 - These commandline tools (im-select/macism) ensure that the input method is English.
 - For editing LaTeX files, choose ChineseArticle.tex or ChineseBeamer.tex as the template. They contain the magic comments:"%!TEX program = xelatex" and "%!TEX view = sioyek". The second one is not essential and one should delete it if the OS doesn't have sioyek been installed.
-
-
-### 16. Kicamon/running (run code)
-- :Run
 
 
 ### Todo
