@@ -10,30 +10,64 @@ local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
-local tex_utils = {}
-tex_utils.in_mathzone = function() -- math context detection
-  return vim.fn["vimtex#syntax#in_mathzone"]() == 1
+local md_utils = {}
+
+-- Treesitter-based math zone detection
+local function ts_in_mathzone()
+  local node = vim.treesitter.get_node()
+  while node do
+    local node_type = node:type()
+    if node_type == "latex_block" or node_type == "latex_inline" or node_type == "latex_span" then
+      return true
+    end
+    node = node:parent()
+  end
+  return false
 end
-tex_utils.in_text = function()
-  return not tex_utils.in_mathzone()
+
+-- Text-scanning fallback: count unmatched $ delimiters up to cursor
+local function text_in_mathzone()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row = cursor[1]
+  local col = cursor[2]
+
+  -- Gather all text up to and including the cursor position
+  local lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+  local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
+  table.insert(lines, current_line:sub(1, col))
+  local text = table.concat(lines, "\n")
+
+  -- Strip escaped dollars
+  text = text:gsub("\\%$", "  ")
+
+  -- Count $$ (display math) first, then replace to avoid double-counting
+  local display_count = 0
+  text = text:gsub("%$%$", function()
+    display_count = display_count + 1
+    return "  "
+  end)
+
+  -- Count remaining single $
+  local inline_count = 0
+  text:gsub("%$", function()
+    inline_count = inline_count + 1
+  end)
+
+  return (display_count % 2 == 1) or (inline_count % 2 == 1)
 end
-tex_utils.in_comment = function() -- comment detection
-  return vim.fn["vimtex#syntax#in_comment"]() == 1
+
+md_utils.in_mathzone = function()
+  local ok, result = pcall(ts_in_mathzone)
+  if ok and result then
+    return true
+  end
+  return text_in_mathzone()
 end
-tex_utils.in_env = function(name) -- generic environment detection
-  local is_inside = vim.fn["vimtex#env#is_inside"](name)
-  return (is_inside[1] > 0 and is_inside[2] > 0)
+
+md_utils.in_text = function()
+  return not md_utils.in_mathzone()
 end
--- A few concrete environments---adapt as needed
-tex_utils.in_equation = function() -- equation environment detection
-  return tex_utils.in_env("equation")
-end
-tex_utils.in_itemize = function() -- itemize environment detection
-  return tex_utils.in_env("itemize")
-end
-tex_utils.in_tikz = function() -- TikZ picture environment detection
-  return tex_utils.in_env("tikzpicture")
-end
+
 return {
 
   s({ trig = ";a", snippetType = "autosnippet" }, {
@@ -150,27 +184,27 @@ return {
 
   s({ trig = "ift", snippetType = "autosnippet" }, {
     t("\\infty"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "ept", snippetType = "autosnippet" }, {
     t("\\emptyset"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "fa", snippetType = "autosnippet" }, {
     t("\\forall"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "ex", snippetType = "autosnippet" }, {
     t("\\exist"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "ii", snippetType = "autosnippet" }, {
     t("\\in"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "sb", snippetType = "autosnippet" }, {
     t("\\subset"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "qed", snippetType = "autosnippet" }, {
     t("\\hfill$\\square$"),
@@ -178,17 +212,17 @@ return {
 
   s({ trig = "lla", snippetType = "autosnippet" }, {
     t("\\Longleftarrow"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "lra", snippetType = "autosnippet" }, {
     t("\\Longrightarrow"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "llra", snippetType = "autosnippet" }, {
     t("\\Longleftrightarrow"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 
   s({ trig = "rra", snippetType = "autosnippet" }, {
     t("\\rightrightarrows"),
-  }, { condition = tex_utils.in_mathzone }),
+  }, { condition = md_utils.in_mathzone }),
 }

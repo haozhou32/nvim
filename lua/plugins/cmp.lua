@@ -23,6 +23,48 @@ return {
         return vim.fn["vimtex#syntax#in_mathzone"]() == 1
       end
 
+      -- Markdown math zone detection (treesitter + text-scanning fallback)
+      local function in_md_mathzone()
+        -- Treesitter: walk up looking for latex_block / latex_inline / latex_span
+        local ok, ts_result = pcall(function()
+          local node = vim.treesitter.get_node()
+          while node do
+            local ntype = node:type()
+            if ntype == "latex_block" or ntype == "latex_inline" or ntype == "latex_span" then
+              return true
+            end
+            node = node:parent()
+          end
+          return false
+        end)
+        if ok and ts_result then
+          return true
+        end
+
+        -- Fallback: count unmatched $ delimiters up to cursor
+        local cursor = vim.api.nvim_win_get_cursor(0)
+        local row, col = cursor[1], cursor[2]
+        local lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+        local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
+        table.insert(lines, current_line:sub(1, col))
+        local text = table.concat(lines, "\n")
+
+        text = text:gsub("\\%$", "  ")
+
+        local display_count = 0
+        text = text:gsub("%$%$", function()
+          display_count = display_count + 1
+          return "  "
+        end)
+
+        local inline_count = 0
+        text:gsub("%$", function()
+          inline_count = inline_count + 1
+        end)
+
+        return (display_count % 2 == 1) or (inline_count % 2 == 1)
+      end
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -32,10 +74,14 @@ return {
         completion = { completeopt = "menu,menuone,noinsert" },
 
         enabled = function()
-          -- Disable in math zones in LaTeX files
           local filetype = vim.bo.filetype
+          -- Disable in math zones in LaTeX files
           if filetype == "tex" or filetype == "latex" then
             return not in_mathzone()
+          end
+          -- Disable in math zones in Markdown files
+          if filetype == "markdown" then
+            return not in_md_mathzone()
           end
           return true
         end,
