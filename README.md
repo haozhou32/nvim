@@ -37,67 +37,6 @@
 | `gf`              | go to file                                | n                  |
 | `:cc`             | jump to the offending line                | quickfix           |
 
-### 2. vimtex 
-
-| Key             | Action                                                | Mode |
-|-----------------|-------------------------------------------------------|------|
-| `<localleader>ll` | compile the file in a continuous mode                 | n    |
-| `<localleader>lk` | stop compiling                                        | n    |
-| `<localleader>lx` | clean the auxiliary files (must stop compiling first) | n    |
-| `<localleader>lt` | open table of contents                                | n    |
-| `<localleader>lw` | count words                                           | n    |
-| `%`               | move between matching delimiters                      | nxo  |
-| `]]`              | jump to the next section                              | nxo  |
-| `[[`              | jump to the beginning of the current section          | nxo  |
-| `[(])m(M)`        | jump to the next (previous) environments              | nxo  |
-| `[(])n(N)`        | jump to the next (previous) math zone                 | nxo  |
-| `[(])r(R)`        | jump to the next (previous) frame                     | nxo  |
-| `<localleader>lv` | forward search                                        | n    |
-| `<Ctrl><Click>`   | inverse search (on Zathura)                           | n    |
-| `<RightClick>`    | inverse search (on Sioyek)                            | n    |
-
-
-- We can also customize the conceal rules at vimtex.lua.
-- If you use Skim as the pdf reader (on Mac OS), you should open Skim and navigate to `setting > Sync` and select `PDF-Tex Sync Support`. Then set the `Preset` field to `Custom`, set the `command` field to `nvim`, and the `Arguments` field to 
-
-```shell
---headless -c "VimtexInverseSearch %line '$file'"
-```
-After that use `<Cmd><Shift><Click>` to do the inverse search.
-
-
-### 3. Luasnip
-
-| Key       | Action                             | Mode                       |
-|-----------|------------------------------------|----------------------------|
-| <\`>tbf   | make the selected parts to be bold | x                          |      
-| `<Ctrl-j>`  | choose the next choice node        | i (choice node is active)  |
-| `<Ctrl-k>`  | choose the previous choice node    | i (choice node is active)  |
-
-
-### 4. cmp (auto completion)
-
-| Key     | Action                                                    | Mode |
-|---------|---------------------------------------------------------- |------|
-| `<Tab>`   | select the next item; go to the next snippet placeholder  | i    |
-| `<S-Tab>` | select the previous item; go to the previous placeholder  | i    |
-| `<CR>`    | expand the snippet; confirm the item                      | i    |
-| `<Esc>`   |close the completion list                                  | i    |
-
-
-
-### 5. The default spell checker
-
-| Key     | Action                                                       | Mode         |
-|-------- |--------------------------------------------------------------|--------------|
-| `zs`      | toggle to enable/disable spell checker in the current buffer | n            |
-| `z=`      | open a list of suggestions                                   | n            |
-| `zg`      | add the word to the good-spell list                          | n            |
-| `zug`     | undo zg                                                      | n            |
-| `zw`      | mark word as wrong                                           | n            |
-| `zuw`     | undo zw                                                      | n            |
-| `]s`      | move to the next misspelled word                             | n            |
-| `[s`      | move to the previous misspelled word                         | n            |
 
 
 
@@ -139,51 +78,27 @@ After that use `<Cmd><Shift><Click>` to do the inverse search.
 - See ![How to master text-object](./docs/text-objects.md)
 
 
-### 10. mini.file
-| Key       | Action                                                    | Mode |
-|-----------|-----------------------------------------------------------|------|
-| `<leader>b` | open mini.file w.r.t. the current buffer                  | n    |
-| `<leader>B` | open mini.file w.r.t. the current working directory       | n    |
 
-
-### 11. obsidian 
-| Key        | Action                            | Mode |
-|------------|-----------------------------------|------|
-| `<leader>on` | create a new note                 | n    |
-| `<leader>of` | find a file in the current vault  | n    |
-| `<leader>ob` | list all backlinks                | n    |
-| `<leader>ol` | list all links                    | n    |
-| `<leader>ot` | list all notes with the tag       | n    |
-| `<leader>op` | past the image from the clipboard | n    |
+### 10. obsidian 
 
 - MacOS users need pngpaste (brew install pngpaste) for the :ObsidianPasteImg command (<leader>op).
 - Change the _relative path_ of the vaults in obsidian.lua.
 
 
-### 12. typst
-
-| Key        | Action               | Mode |
-|------------|----------------------|------|
-| `<leader>tw` | typst watch          | n    |
-| `<leader>tp` | typst preview        | n    |
-| `<leader>ts` | typst slides preview | n    |
-
-
-### 13. installing lsp and other tools by mason
+### 12. installing lsp and other tools by mason
 
 - put the lsp under the table of the variable `servers`
 - put other tools (e.g. formatters) under the table of mason-tool-installer.
 - re-open nvim and all the tools will be installed automatically.
 - :Mason to check the status of the tools.
 
-### 14. upgrade/uninstall plugins
+### 13. upgrade/uninstall plugins
 
 - :Lazy
 
-### 15. Chinese input supports
+### 14. Chinese input supports
 - [Require additonal commandline tools](https://github.com/keaising/im-select.nvim?tab=readme-ov-file)
 - These commandline tools (im-select/macism) ensure that the input method is English.
 - For editing LaTeX files, choose ChineseArticle.tex or ChineseBeamer.tex as the template. They contain the magic comments:"%!TEX program = xelatex" and "%!TEX view = sioyek". The second one is not essential and one should delete it if the OS doesn't have sioyek been installed.
 
 
-### Todo

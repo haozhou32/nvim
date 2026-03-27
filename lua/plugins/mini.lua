@@ -17,20 +17,21 @@ return {
     end,
 
     keys = {
-      {
-        "<leader>b",
-        function()
-          require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
-        end,
-        desc = "Open mini.files (Directory of Current [b]uffer)",
-      },
-      {
-        "<leader>B",
-        function()
-          require("mini.files").open(vim.uv.cwd(), true)
-        end,
-        desc = "Open mini.files (Current working directory)",
-      },
+      -- Uncomment it if you want to use mini.files instead of neotree.
+      -- {
+      --   "<leader>b",
+      --   function()
+      --     require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+      --   end,
+      --   desc = "Open mini.files (Directory of Current [b]uffer)",
+      -- },
+      -- {
+      --   "<leader>B",
+      --   function()
+      --     require("mini.files").open(vim.uv.cwd(), true)
+      --   end,
+      --   desc = "Open mini.files (Current working directory)",
+      -- },
     },
   },
 }
