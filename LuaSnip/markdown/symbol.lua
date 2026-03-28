@@ -40,6 +40,9 @@ local function text_in_mathzone()
   -- Strip escaped dollars
   text = text:gsub("\\%$", "  ")
 
+  -- Strip inline code spans to avoid counting $ inside backticks
+  text = text:gsub("`[^`\n]*`", function(m) return string.rep(" ", #m) end)
+
   -- Count $$ (display math) first, then replace to avoid double-counting
   local display_count = 0
   text = text:gsub("%$%$", function()

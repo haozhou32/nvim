@@ -14,7 +14,7 @@ Before diving into specific languages, here are some universal commands that mak
 ### Window and Buffer Management
 * **Window Navigation:** `<Ctrl-h>` / `<Ctrl-j>` / `<Ctrl-k>` / `<Ctrl-l>` (Left, Down, Up, Right)
 * **Buffer Navigation:** `<Ctrl-n>` (Next buffer) / `<Ctrl-p>` (Previous buffer)
-* **Close Buffer:** `<Ctrl-q>`
+* **Close Buffer:** `<Ctrl-x>`
 
 ### Spell Checking
 The default spell checker is highly useful for text documents:
@@ -64,6 +64,13 @@ If you want to click on the PDF and jump to the corresponding code in Neovim:
 
 ## 3. Writing Markdown (`obsidian.nvim`)
 Markdown functionality in this configuration is heavily integrated with Obsidian, turning Neovim into a Zettelkasten/PKM system.
+
+First, create the vaults and let obsidian.nvim register them:
+```shell
+mkdir -p ~/vaults/technotes ~/vaults/personal
+
+```
+You may add more workspaces editing ~/.config/nvim/lua/plugins/obsidian.lua
 
 ### Note Management
 * **`<leader>on`** : Create a new note

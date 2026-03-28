@@ -1,82 +1,105 @@
+# Neovim for Theorists 🖋️
+
+Welcome! If you are a microeconomic theorist, a mathematician, or an academic who practically lives inside LaTeX and Markdown files (with occasional dips into Python), this Neovim configuration is designed for you. 
+
+This guide is written for users who might not consider themselves "tech-savvy" but are eager to type math and text **at the speed of thought**. 
+
+*Note: This tutorial assumes you are using **macOS**. If you are on Linux, you are probably already familiar with these concepts and adapting this guide will be trivial. If you are a Windows user, you can use WSL (Windows Subsystem for Linux) and follow similar steps.*
+
+---
+
 ## Some screeningshots
-![greeter for neovim](./images/greeter.png)
-![List of Plugins](./images/lazy.png)
+![greeter for neovim](./images/nvim.png)
 ![LaTeX](./images/latex.png)
-![lua](./images/lua.png)
 ![markdown](./images/markdown.png)
 
+---
 
-## Main References
-[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), for general neovim configuration.
+## Part 1: Installation & Setup
 
+Before we download this configuration, we need to install Neovim and a few essential tools. We will use **Homebrew**, the standard package manager for macOS. *(If you don't have Homebrew installed, open your Terminal, visit [brew.sh](https://brew.sh), and paste their installation command first).*
 
-[A guide to supercharged mathematical typesetting](https://ejmastnak.com/tutorials/vim-latex/intro/), for LaTeX specific neovim configuration.
+### 1. Install Dependencies
+Open your Terminal and run the following commands to install everything you need:
 
+```bash
+# Install Neovim itself
+brew install neovim
 
+# Install a Nerd Font (Crucial for displaying icons properly in Neovim)
+brew install --cask font-hack-nerd-font
+# IMPORTANT: After installing, open your terminal preferences and set your font to "Hack Nerd Font".
 
-## Keyboard Mappings
+# Install Sioyek (A PDF viewer tailored for reading research papers and live-previewing LaTeX)
+brew install --cask sioyek
 
-`<leader> = <space>`
+# Install pngpaste (Required for pasting clipboard images directly into Markdown via the :ObsidianPasteImg command)
+brew install pngpaste
+```
 
-`<localleader> = <\>`
+### 2. Clone the Configuration
+Neovim looks for its configuration files in a specific hidden folder on your computer (`~/.config/nvim`). We need to download (clone) this repository directly into that location.
 
-### 1. Basic
+Run these commands in your terminal:
 
-| Key             |  Action                                   | Mode               |
-|-----------------|-------------------------------------------|--------------------|
-| `<Esc>`           | stop highlighting the words               | n                  |
-| `<leader>oq `     | open diagnostic quickfix list             | n                  |
-| `<leader>cq`      | close diagnostic quickfix list            | n                  |
-| `<Ctrl-h>`        | Move focus to the left window             | n                  |
-| `<Ctrl-l>`        | Move focus to the right window            | n                  |
-| `<Ctrl-j>`        | Move focus to the lower window            | n                  |
-| `<Ctrl-k>`        | Move focus to the upper window            | n                  |
-| `gf`              | go to file                                | n                  |
-| `:cc`             | jump to the offending line                | quickfix           |
+```bash
+# Create the config directory if it doesn't already exist
+mkdir -p ~/.config
 
+# Download this repository to the correct path
+git clone https://github.com/haozhou32/nvim ~/.config/nvim
+```
 
+Now, simply type `nvim` in your terminal and press Enter. The configuration will automatically download and install all the necessary plugins on its first run. Let it finish processing, and then you are ready to go!
 
+---
 
-### 2. mini.comment
-| Key | Action                             | Mode |
-|-----|------------------------------------|------|
-| `gc`  | comment and uncomment a code block | x    |
-| `gcc` | comment and uncomment a line       | n    |
+## Part 2: How to Use Vim
 
+If you are coming from standard editors (like TeXShop, VSCode, or Overleaf), Vim's keyboard-driven workflow will feel like an alien landscape at first. Don't panic! It is a language, and once you learn it, you will never want to go back.
 
-### 3. conform (auto_formatter) 
-| Key         | Action              | Mode                           |
-|-------------|---------------------|--------------------------------|
-| `<leader>f`   | auto formatting     | n                              |
+### 1. The Most Important Step: VimTutor
+The absolute best way to learn Vim is by doing. Open your terminal and type:
+```bash
+vimtutor
+```
+This will launch a built-in, interactive 30-minute lesson. It teaches you the core philosophy of Vim (how to move your cursor, edit text, delete words, and save files). **Do not skip this.** It is the foundation of everything else.
 
-- Currently, it only supports `lua` and `python`. we can add more formatter at conform.lua.
+### 2. Dive Deeper with This Repo's Documentation
+Once you have the basics down, check out the `docs/` folder included inside this repository. I have written advanced materials and tips specific to this setup that will help you integrate Neovim seamlessly into your daily research workflow.
 
+### 3. For the Ambitious Reader
+If you want to truly master your setup, understand how it works under the hood, and customize it to your exact liking, here are the holy grails of Neovim and LaTeX:
+- **[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)**: The gold standard repository for understanding how modern Neovim configurations are built from scratch.
+- **[A guide to supercharged mathematical typesetting](https://ejmastnak.com/tutorials/vim-latex/intro/)**: An incredible tutorial series by Elijan Mastnak (building on the legendary workflow of the late Gilles Castel). It will teach you how to configure Vim snippets to type LaTeX math literally as fast as you can write it by hand.
 
-### 4. mini.surround (text-object)
-- See ![How to master text-object](./docs/text-objects.md)
+---
 
+## Part 3: Maintaining Your Configuration
 
+Over time, you will want to update your tools, clean up unused plugins, or add support for new programming languages. This configuration makes maintenance incredibly easy through built-in commands.
 
-### 5. obsidian 
+### Managing Plugins with Lazy
+We use a modern plugin manager called `lazy.nvim`. To manage your Neovim plugins, simply open Neovim and type:
+```vim
+:Lazy
+```
+A sleek menu will pop up. From here, you can:
+- Press `U` to **Update** your plugins to their latest versions.
+- Press `X` to **Clean** (uninstall) any plugins you have removed from the configuration files.
+- Press `?` for a list of all available helper commands.
 
-- MacOS users need pngpaste (brew install pngpaste) for the :ObsidianPasteImg command (<leader>op).
-- Change the _relative path_ of the vaults in obsidian.lua.
+### Installing Tools with Mason
+To get smart autocompletion, error checking, and formatting for LaTeX, Markdown, and Python, we use a tool called Mason. Inside Neovim, type:
+```vim
+:Mason
+```
+This opens a graphical menu where you can easily browse, install, and update background tools:
+- **LSPs (Language Servers):** e.g., `texlab` for LaTeX, `marksman` for Markdown, or `pyright` for Python.
+- **Formatters:** e.g., `black` for Python.
+- **Linters** for catching syntax errors.
 
+Navigate the menu, press `i` to install the tools you need, and you'll be writing flawless code and papers in no time.
 
-### 6. installing lsp and other tools by mason
-
-- put the lsp under the table of the variable `servers`
-- put other tools (e.g. formatters) under the table of mason-tool-installer.
-- re-open nvim and all the tools will be installed automatically.
-- :Mason to check the status of the tools.
-
-### 7. upgrade/uninstall plugins
-
-- :Lazy
-
-### 8. Chinese input supports
-- [Require additonal commandline tools](https://github.com/keaising/im-select.nvim?tab=readme-ov-file)
-- These commandline tools (im-select/macism) ensure that the input method is English.
-- For editing LaTeX files, choose ChineseArticle.tex or ChineseBeamer.tex as the template. They contain the magic comments:"%!TEX program = xelatex" and "%!TEX view = sioyek". The second one is not essential and one should delete it if the OS doesn't have sioyek been installed.
-
-
+---
+*Happy typing, and may your proofs be elegant and your compilations error-free!*

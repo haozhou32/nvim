@@ -43,6 +43,9 @@ local function text_in_mathzone()
 
   text = text:gsub("\\%$", "  ")
 
+  -- Strip inline code spans to avoid counting $ inside backticks
+  text = text:gsub("`[^`\n]*`", function(m) return string.rep(" ", #m) end)
+
   local display_count = 0
   text = text:gsub("%$%$", function()
     display_count = display_count + 1
