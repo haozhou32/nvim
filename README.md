@@ -2,7 +2,7 @@
 
 Welcome! If you are a microeconomic theorist, a mathematician, or an academic who practically lives inside LaTeX and Markdown files (with occasional dips into Python), this Neovim configuration is designed for you. 
 
-This guide is written for users who might not consider themselves "tech-savvy" but are eager to type math and text **at the speed of thought**. 
+This guide is written for users who are eager to type math and text **at the speed of thought**. 
 
 *Note: This tutorial assumes you are using **macOS**. If you are on Linux, you are probably already familiar with these concepts and adapting this guide will be trivial. If you are a Windows user, you can use WSL (Windows Subsystem for Linux) and follow similar steps.*
 
