@@ -23,21 +23,43 @@ Before we download this configuration, we need to install Neovim and a few essen
 Open your Terminal and run the following commands to install everything you need:
 
 ```bash
-# Install Neovim itself
-brew install neovim
+# Install Neovim and core search/file tools
+brew install neovim fd ripgrep fzf
+
+# Install Typst (a modern alternative to LaTeX)
+brew install typst
 
 # Install a Nerd Font (Crucial for displaying icons properly in Neovim)
 brew install --cask font-hack-nerd-font
-# IMPORTANT: After installing, open your terminal preferences and set your font to "Hack Nerd Font".
+# After installing, open your terminal preferences and set your font to "Hack Nerd Font".
 
 # Install Sioyek (A PDF viewer tailored for reading research papers and live-previewing LaTeX)
 brew install --cask sioyek
 
 # Install pngpaste (Required for pasting clipboard images directly into Markdown via the :ObsidianPasteImg command)
 brew install pngpaste
+
+# Install macism for seamless CJK (Chinese/Japanese/Korean) input support
+brew tap laishulu/homebrew
+brew install macism
 ```
 
-### 2. Clone the Configuration
+We also need `tree-sitter-cli` for advanced syntax highlighting. This requires `cargo` (Rust's package manager). If you have Rust installed, run:
+```bash
+cargo install --locked tree-sitter-cli
+```
+*(If you do not have Rust installed, you can easily get it by following the instructions at [rustup.rs](https://rustup.rs/)).*
+
+
+### 2. Prepare Obsidian Vaults
+This configuration includes `obsidian.nvim` to help you manage your personal knowledge base. Let's create the default folders (vaults) it expects:
+
+```bash
+mkdir -p ~/vaults/technotes ~/vaults/personal
+```
+
+
+### 3. Clone the Configuration
 Neovim looks for its configuration files in a specific hidden folder on your computer (`~/.config/nvim`). We need to download (clone) this repository directly into that location.
 
 Run these commands in your terminal:
@@ -102,4 +124,22 @@ This opens a graphical menu where you can easily browse, install, and update bac
 Navigate the menu, press `i` to install the tools you need, and you'll be writing flawless code and papers in no time.
 
 ---
+
+## Part 4: Troubleshooting
+
+### Mason fails to install `black` or `isort` (Python Formatters)
+If you try to install Python tools via `:Mason` and it fails, it is likely because your Mac is only using the default, built-in Apple version of Python. 
+
+**Why does this happen?**
+Apple locks down the built-in system Python to prevent users from accidentally breaking macOS background tasks. To enforce this, Apple removes certain module-building tools (like `pip` and `venv`) that Mason relies on to create safe, isolated sandboxes for formatters like `black`.
+
+**The Fix:**
+You need to install a "user-owned" version of Python that is fully unlocked. You can do this by installing a Python distribution like **Conda** (Anaconda/Miniconda) or by simply using Homebrew:
+```bash
+brew install python
+```
+Once a user-owned Python is active on your system, restart Neovim, and Mason will be able to install `black` and `isort` without any issues!
+
+---
+
 *Happy typing, and may your proofs be elegant and your compilations error-free!*
