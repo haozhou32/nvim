@@ -29,8 +29,7 @@ return {
         local ok, ts_result = pcall(function()
           local node = vim.treesitter.get_node()
           while node do
-            local ntype = node:type()
-            if ntype == "latex_block" or ntype == "latex_inline" or ntype == "latex_span" then
+            if node:type() == "latex_block" then
               return true
             end
             node = node:parent()
@@ -44,7 +43,8 @@ return {
         -- Fallback: count unmatched $ delimiters up to cursor
         local cursor = vim.api.nvim_win_get_cursor(0)
         local row, col = cursor[1], cursor[2]
-        local lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+        local start = math.max(0, row - 1 - 200)
+        local lines = vim.api.nvim_buf_get_lines(0, start, row - 1, false)
         local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
         table.insert(lines, current_line:sub(1, col))
         local text = table.concat(lines, "\n")

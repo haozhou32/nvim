@@ -16,8 +16,7 @@ local md_utils = {}
 local function ts_in_mathzone()
   local node = vim.treesitter.get_node()
   while node do
-    local node_type = node:type()
-    if node_type == "latex_block" or node_type == "latex_inline" or node_type == "latex_span" then
+    if node:type() == "latex_block" then
       return true
     end
     node = node:parent()
@@ -32,7 +31,8 @@ local function text_in_mathzone()
   local col = cursor[2]
 
   -- Gather all text up to and including the cursor position
-  local lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+  local start = math.max(0, row - 1 - 200)
+  local lines = vim.api.nvim_buf_get_lines(0, start, row - 1, false)
   local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
   table.insert(lines, current_line:sub(1, col))
   local text = table.concat(lines, "\n")
