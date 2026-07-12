@@ -85,13 +85,3 @@ You may add more workspaces editing ~/.config/nvim/lua/plugins/obsidian.lua
 * **`<leader>op`** : Paste an image directly from your clipboard into the Markdown document. 
   * *macOS users must run `brew install pngpaste` for this to work.*
 
----
-
-## 4. Writing Typst
-Typst is a modern, fast alternative to LaTeX. The keybindings for Typst parallel the compilation workflow of LaTeX.
-
-* **`<leader>tw`** : Start Typst Watch (compiles the document continuously as you edit)
-* **`<leader>tp`** : Open Typst Preview
-* **`<leader>ts`** : Open Typst Slides Preview (optimized for presentations)
-
-

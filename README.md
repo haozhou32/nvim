@@ -26,9 +26,6 @@ Open your Terminal and run the following commands to install everything you need
 # Install Neovim and core search/file tools
 brew install neovim fd ripgrep fzf
 
-# Install Typst (a modern alternative to LaTeX)
-brew install typst
-
 # Install a Nerd Font (Crucial for displaying icons properly in Neovim)
 brew install --cask font-hack-nerd-font
 # After installing, open your terminal preferences and set your font to "Hack Nerd Font".
@@ -118,28 +115,9 @@ To get smart autocompletion, error checking, and formatting for LaTeX, Markdown,
 ```
 This opens a graphical menu where you can easily browse, install, and update background tools:
 - **LSPs (Language Servers):** e.g., `texlab` for LaTeX, `marksman` for Markdown, or `pyright` for Python.
-- **Formatters:** e.g., `black` for Python.
+- **Formatters:** e.g., `ruff` for Python.
 - **Linters** for catching syntax errors.
 
 Navigate the menu, press `i` to install the tools you need, and you'll be writing flawless code and papers in no time.
-
----
-
-## Part 4: Troubleshooting
-
-### Mason fails to install `black` or `isort` (Python Formatters)
-If you try to install Python tools via `:Mason` and it fails, it is likely because your Mac is only using the default, built-in Apple version of Python. 
-
-**Why does this happen?**
-Apple locks down the built-in system Python to prevent users from accidentally breaking macOS background tasks. To enforce this, Apple removes certain module-building tools (like `pip` and `venv`) that Mason relies on to create safe, isolated sandboxes for formatters like `black`.
-
-**The Fix:**
-You need to install a "user-owned" version of Python that is fully unlocked. You can do this by installing a Python distribution like **Conda** (Anaconda/Miniconda) or by simply using Homebrew:
-```bash
-brew install python
-```
-Once a user-owned Python is active on your system, restart Neovim, and Mason will be able to install `black` and `isort` without any issues!
-
----
 
 *Happy typing, and may your proofs be elegant and your compilations error-free!*

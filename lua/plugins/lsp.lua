@@ -110,17 +110,6 @@ return {
             },
           },
         },
-        tinymist = {
-          settings = {
-            exportPdf = "onType",
-            rootPath = "-",
-          },
-        },
-        -- typst_lsp = {
-        --   settings = {
-        --     exportPdf = "onType",
-        --   },
-        -- },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -144,8 +133,7 @@ return {
       require("mason-tool-installer").setup({
         ensure_installed = {
           "stylua",
-          "isort",
-          "black",
+          "ruff",
         },
       })
 
