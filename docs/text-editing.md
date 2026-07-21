@@ -59,29 +59,3 @@ If you want to click on the PDF and jump to the corresponding code in Neovim:
 * **`]r` / `[r`** : Jump to the next / previous frame (useful for Beamer presentations) 
 * **`\lw`** : Count words in your document
 * **`\lt`** : Open the Table of Contents
-
----
-
-## 3. Writing Markdown (`obsidian.nvim`)
-Markdown functionality in this configuration is heavily integrated with Obsidian, turning Neovim into a Zettelkasten/PKM system.
-
-First, create the vaults and let obsidian.nvim register them:
-```shell
-mkdir -p ~/vaults/technotes ~/vaults/personal
-
-```
-You may add more workspaces editing ~/.config/nvim/lua/plugins/obsidian.lua
-
-### Note Management
-* **`<leader>on`** : Create a new note
-* **`<leader>of`** : Find a file in the current Obsidian vault
-* **`<leader>ot`** : List all notes associated with a specific tag
-
-### Linking
-* **`<leader>ol`** : List all links in the current note
-* **`<leader>ob`** : List all backlinks (notes that link to the current note)
-
-### Pasting Images
-* **`<leader>op`** : Paste an image directly from your clipboard into the Markdown document. 
-  * *macOS users must run `brew install pngpaste` for this to work.*
-

@@ -33,9 +33,6 @@ brew install --cask font-hack-nerd-font
 # Install Sioyek (A PDF viewer tailored for reading research papers and live-previewing LaTeX)
 brew install --cask sioyek
 
-# Install pngpaste (Required for pasting clipboard images directly into Markdown via the :ObsidianPasteImg command)
-brew install pngpaste
-
 # Install macism for seamless CJK (Chinese/Japanese/Korean) input support
 brew tap laishulu/homebrew
 brew install macism
@@ -48,15 +45,7 @@ cargo install --locked tree-sitter-cli
 *(If you do not have Rust installed, you can easily get it by following the instructions at [rustup.rs](https://rustup.rs/)).*
 
 
-### 2. Prepare Obsidian Vaults
-This configuration includes `obsidian.nvim` to help you manage your personal knowledge base. Let's create the default folders (vaults) it expects:
-
-```bash
-mkdir -p ~/vaults/technotes ~/vaults/personal
-```
-
-
-### 3. Clone the Configuration
+### 2. Clone the Configuration
 Neovim looks for its configuration files in a specific hidden folder on your computer (`~/.config/nvim`). We need to download (clone) this repository directly into that location.
 
 Run these commands in your terminal:
