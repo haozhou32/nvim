@@ -60,6 +60,17 @@ local function setup_live_reload()
 end
 
 -- -----------------------------------------------------------------------------
+-- Terminal window navigation
+-- -----------------------------------------------------------------------------
+
+-- Move directly from Claude's terminal to an adjacent split. Stopping insert
+-- first changes Neovim from terminal-input mode to Terminal-Normal mode.
+local function move_from_terminal(direction)
+  vim.cmd("stopinsert")
+  vim.cmd("wincmd " .. direction)
+end
+
+-- -----------------------------------------------------------------------------
 -- Explicit context sending
 -- -----------------------------------------------------------------------------
 
@@ -186,6 +197,41 @@ return {
           winhighlight = "Normal:Normal,NormalNC:Normal,WinBar:SnacksWinBar,WinBarNC:SnacksWinBarNC,FloatTitle:SnacksTitle,FloatFooter:SnacksFooter,WinSeparator:SnacksWinSeparator",
         },
         keys = {
+          -- Navigate splits directly without relying on the timing-sensitive
+          -- double-Esc terminal mapping.
+          claude_left = {
+            "<C-h>",
+            function()
+              move_from_terminal("h")
+            end,
+            mode = "t",
+            desc = "Move focus to the left window",
+          },
+          claude_down = {
+            "<C-j>",
+            function()
+              move_from_terminal("j")
+            end,
+            mode = "t",
+            desc = "Move focus to the lower window",
+          },
+          claude_up = {
+            "<C-k>",
+            function()
+              move_from_terminal("k")
+            end,
+            mode = "t",
+            desc = "Move focus to the upper window",
+          },
+          claude_right = {
+            "<C-l>",
+            function()
+              move_from_terminal("l")
+            end,
+            mode = "t",
+            desc = "Move focus to the right window",
+          },
+
           -- Terminal-input mode needs its own mapping to hide the Claude pane.
           claude_hide = {
             toggle_key,
