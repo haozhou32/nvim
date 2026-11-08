@@ -22,6 +22,20 @@ return {
         "python",
       }
       require("nvim-treesitter").install(parsers)
+
+      -- Keep \begin and \end yellow even inside math environments such as align*.
+      -- Give their @module capture priority 110, above @markup.math's default 100.
+      -- Extend the default LaTeX query so other highlighting and conceal colors stay unchanged.
+      vim.treesitter.query.set("latex", "highlights", [[;; extends
+        ((begin
+          command: _ @module)
+          (#set! priority 110))
+
+        ((end
+          command: _ @module)
+          (#set! priority 110))
+      ]])
+
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)
           local buf, filetype = args.buf, args.match
@@ -54,8 +68,10 @@ return {
           -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
           -- vim.wo.foldmethod = 'expr'
 
-          -- enables treesitter based indentation
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          -- Keep VimTeX's indentation for TeX; use Tree-sitter indentation elsewhere.
+          if filetype ~= "tex" and language ~= "latex" then
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
         end,
       })
     end,

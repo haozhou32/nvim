@@ -10,6 +10,10 @@ return {
 
   {
     "tpope/vim-sleuth",
+    init = function()
+      -- Keep TeX's explicit indentation instead of guessing from existing files.
+      vim.g.sleuth_tex_heuristics = 0
+    end,
   },
 
   {

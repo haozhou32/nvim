@@ -1,5 +1,5 @@
 -- Apply TeX customizations after the default filetype mappings and options.
-local undo = { "setlocal conceallevel<" }
+local undo = { "setlocal conceallevel< shiftwidth< softtabstop< expandtab<" }
 
 local function map(modes, lhs, rhs)
   vim.keymap.set(modes, lhs, rhs, { buffer = true, silent = true })
@@ -17,8 +17,11 @@ map({ "x", "o" }, "am", "<plug>(vimtex-a$)")
 map({ "x", "o" }, "im", "<plug>(vimtex-i$)")
 map("n", "<localleader>lw", "<Cmd>VimtexCountWords<CR>")
 
--- Set local values only, leaving other buffers' display defaults unchanged.
+-- Set local values only, leaving other buffers' defaults unchanged.
 vim.opt_local.conceallevel = 2
+vim.opt_local.shiftwidth = 2
+vim.opt_local.softtabstop = 2
+vim.opt_local.expandtab = true
 
 -- Remove our customizations if this buffer changes filetype.
 if vim.b.undo_ftplugin then
