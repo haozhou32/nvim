@@ -134,6 +134,7 @@ return {
         ensure_installed = {
           "stylua",
           "ruff",
+          "prettier",
         },
       })
 
