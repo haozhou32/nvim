@@ -4,12 +4,23 @@ return {
     lazy = false,
     -- tag = "v2.15", -- uncomment to pin to a specific release
     init = function()
-      -- vim.g.vimtex_view_method = "zathura"
-      if vim.uv.os_uname().sysname == "Darwin" then
-        vim.g.vimtex_view_method = "sioyek" -- or "skim"
-        vim.g.vimtex_view_skim_sync = 1
-      elseif vim.uv.os_uname().sysname == "Linux" then
-        vim.g.vimtex_view_method = "zathura"
+      local system = vim.uv.os_uname()
+      if system.sysname == "Darwin" then
+        vim.g.vimtex_view_method = "sioyek"
+      elseif system.sysname == "Linux" then
+        local is_orbstack = (system.release or ""):lower():find("orbstack", 1, true) ~= nil
+        if is_orbstack and vim.fn.executable("mac") == 1 then
+          -- OrbStack translates guest paths and opens PDFs in the macOS Sioyek app.
+          -- This bridge opens PDFs only; cross-OS SyncTeX is not configured.
+          vim.g.vimtex_view_method = "general"
+          vim.g.vimtex_view_general_viewer = "mac"
+          vim.g.vimtex_view_general_options = "open -a sioyek @pdf"
+          -- Citation context menus need the full command, without the @pdf placeholder.
+          vim.g.vimtex_context_pdf_viewer = "mac open -a sioyek"
+        else
+          -- Ordinary Linux (or a container without OrbStack's host-command bridge).
+          vim.g.vimtex_view_method = "zathura"
+        end
       end
 
       vim.g.vimtex_imaps_enabled = 0

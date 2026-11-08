@@ -3,18 +3,18 @@
 `<leader> = <space>`
 
 
-## 1. Quickfix
+## 1. Diagnostic Location List
 
-Here is how you interact with the Quickfix list in this configuration:
+These shortcuts use the window-local location list, not Vim's global Quickfix list:
 
-*   **`<leader>oq` (Open Quickfix):** 
-    This opens the Quickfix window at the bottom of your screen. 
-*   **Navigating the List:** 
-    Once the window is open, you can move up and down using `j` and `k`. Press `<Enter>` on any line to jump straight to that error in your document.
-*   **`:cc` (Current Error):** 
-    Sometimes, a LaTeX compiler error or a Python traceback is too long to fit on a single line in the Quickfix window. If you want to see the complete, uncut message for the error your cursor is currently on, type `:cc` and press Enter. It will print the full error message at the bottom of your screen.
-*   **`<leader>cq` (Close Quickfix):** 
-    This safely closes the Quickfix window and gives you your screen space back once you have fixed your typos.
+*   **`<leader>oq` (Open diagnostics):**
+    This opens the current buffer's diagnostics in the location-list window at the bottom of your screen.
+*   **Navigating the List:**
+    Move up and down using `j` and `k`. Press `<Enter>` on an entry to jump to that diagnostic in your document.
+*   **`:ll` (Current Diagnostic):**
+    Jump to the current location-list entry and display its diagnostic message. For a separate global Quickfix list, use `:cc` instead.
+*   **`<leader>cq` (Close diagnostics):**
+    This closes the location-list window.
 
 ---
 
@@ -64,7 +64,15 @@ Instantly, Neovim will open `appendix.tex` right in front of you.
 - :Mason to check the status of the tools.
 
 
-## 6. Chinese input supports
+## 6. PDF viewers
+
+VimTeX selects the PDF viewer automatically:
+
+- **macOS:** Sioyek, using VimTeX's native viewer integration.
+- **Linux:** Zathura, using VimTeX's native viewer integration.
+- **OrbStack Linux:** the macOS Sioyek app, launched with `mac open -a sioyek`. OrbStack translates shared macOS paths and Linux VM paths for the host app. This opens PDFs only; cross-OS SyncTeX forward/inverse search is not configured. If the `mac` bridge is unavailable, the configuration falls back to Zathura.
+
+## 7. Chinese input supports
 - [Require additonal commandline tools](https://github.com/keaising/im-select.nvim?tab=readme-ov-file)
 - These commandline tools (im-select/macism) ensure that the input method is English.
 - For editing LaTeX files, choose ChineseArticle.tex or ChineseBeamer.tex as the template. They contain the magic comments:"%!TEX program = xelatex" and "%!TEX view = sioyek". The second one is not essential and one should delete it if the OS doesn't have sioyek been installed.
