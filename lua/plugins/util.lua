@@ -1,11 +1,4 @@
 return {
-  {
-    "echasnovski/mini.comment",
-    -- In the normal mode, enter "gcc" to comment and uncomment a line,
-    -- In the visual mode, enter "gc" to comment and uncomment a code block.
-    config = true,
-  },
-
   -- Swtich to the default input method (English) when entering insertmode.
   {
     "keaising/im-select.nvim",

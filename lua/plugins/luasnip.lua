@@ -13,7 +13,7 @@ return {
         store_selection_keys = "`",
       })
 
-      require("luasnip.loaders.from_lua").load({ paths = { "~/.config/nvim/LuaSnip/" } })
+      require("luasnip.loaders.from_lua").load({ paths = { vim.fn.stdpath("config") .. "/LuaSnip/" } })
     end,
     keys = function()
       return {

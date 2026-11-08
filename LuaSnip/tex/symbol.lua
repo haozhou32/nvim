@@ -161,7 +161,7 @@ return {
   }, { condition = tex_utils.in_mathzone }),
 
   s({ trig = "ex", snippetType = "autosnippet" }, {
-    t("\\exist"),
+    t("\\exists"),
   }, { condition = tex_utils.in_mathzone }),
 
   s({ trig = "ii", snippetType = "autosnippet" }, {

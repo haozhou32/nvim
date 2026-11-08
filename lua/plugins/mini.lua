@@ -7,6 +7,10 @@ return {
       require("mini.ai").setup({ n_lines = 500 })
       require("mini.surround").setup()
 
+      -- In the normal mode, enter "gcc" to comment and uncomment a line,
+      -- In the visual mode, enter "gc" to comment and uncomment a code block.
+      require("mini.comment").setup()
+
       -- Simple and easy statusline.
       local statusline = require("mini.statusline")
       statusline.setup({ use_icons = vim.g.have_nerd_font })
