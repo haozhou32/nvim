@@ -1,265 +1,265 @@
--- -----------------------------------------------------------------------------
--- Shared state
--- -----------------------------------------------------------------------------
-
--- F4 works reliably in both Neovim and terminal mode, including through tmux.
-local toggle_key = "<F4>"
-local reload_timer
-
--- -----------------------------------------------------------------------------
--- Live reload
--- -----------------------------------------------------------------------------
-
--- Claude's acceptEdits mode writes changes directly to disk. Keep Neovim's
--- loaded file buffers in sync while the managed Claude terminal is running.
-local function reload_changed_files()
-  local ok, terminal = pcall(require, "claudecode.terminal")
-  if not ok or not terminal.get_active_terminal_bufnr() then
-    return
-  end
-
-  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-    -- Ignore terminals, help pages, scratch buffers, and unloaded buffers.
-    local is_file_buffer = vim.api.nvim_buf_is_loaded(bufnr)
-      and vim.api.nvim_buf_get_name(bufnr) ~= ""
-      and vim.bo[bufnr].buftype == ""
-
-    -- Never overwrite unsaved Neovim edits. :checktime reloads only when the
-    -- file changed on disk and 'autoread' permits it.
-    if is_file_buffer and not vim.bo[bufnr].modified then
-      pcall(vim.cmd, ("silent! checktime %d"):format(bufnr))
-    end
-  end
-end
-
-local function setup_live_reload()
-  -- Make :checktime automatically reread clean buffers changed on disk.
-  vim.opt.autoread = true
-
-  -- Avoid duplicate timers if the plugin configuration is reloaded.
-  if reload_timer then
-    vim.fn.timer_stop(reload_timer)
-  end
-
-  -- A short polling interval also refreshes visible files while focus remains
-  -- inside Claude's terminal, where normal editor autocmds do not fire.
-  reload_timer = vim.fn.timer_start(500, reload_changed_files, { ["repeat"] = -1 })
-
-  -- Stop the repeating timer cleanly when Neovim exits.
-  local group = vim.api.nvim_create_augroup("ClaudeCodeLiveReload", { clear = true })
-  vim.api.nvim_create_autocmd("VimLeavePre", {
-    group = group,
-    once = true,
-    callback = function()
-      if reload_timer then
-        vim.fn.timer_stop(reload_timer)
-        reload_timer = nil
-      end
-    end,
-  })
-end
-
--- -----------------------------------------------------------------------------
--- Terminal window navigation
--- -----------------------------------------------------------------------------
-
--- Move directly from Claude's terminal to an adjacent split. Stopping insert
--- first changes Neovim from terminal-input mode to Terminal-Normal mode.
-local function move_from_terminal(direction)
-  vim.cmd("stopinsert")
-  vim.cmd("wincmd " .. direction)
-end
-
--- -----------------------------------------------------------------------------
--- Explicit context sending
--- -----------------------------------------------------------------------------
-
--- Send the current visual selection without enabling automatic selection
--- tracking. This avoids continuous WebSocket broadcasts on every visual-mode
--- change while preserving an explicit <leader>as workflow.
-local function send_visual_selection()
-  local tree_filetypes = {
-    NvimTree = true,
-    ["neo-tree"] = true,
-    oil = true,
-    minifiles = true,
-    netrw = true,
-    snacks_picker_list = true,
-  }
-
-  -- Explorer buffers represent files rather than normal text selections.
-  if tree_filetypes[vim.bo.filetype] then
-    vim.cmd("ClaudeCodeTreeAdd")
-    return
-  end
-
-  local file_path = vim.api.nvim_buf_get_name(0)
-  if file_path == "" then
-    vim.notify("Cannot send a selection from an unnamed buffer", vim.log.levels.WARN)
-    return
-  end
-
-  -- Claude's protocol uses zero-indexed, inclusive line numbers.
-  local start_line, end_line = require("claudecode.visual_commands").get_visual_range()
-  local sent = require("claudecode").send_at_mention(file_path, start_line - 1, end_line - 1, "ClaudeCodeSend")
-  if sent then
-    -- Leave visual mode after the selection has been sent successfully.
-    local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
-    vim.api.nvim_feedkeys(esc, "i", true)
-  end
-end
-
--- -----------------------------------------------------------------------------
--- Plugin specification
--- -----------------------------------------------------------------------------
-
+-- -- -----------------------------------------------------------------------------
+-- -- Shared state
+-- -- -----------------------------------------------------------------------------
+--
+-- -- F4 works reliably in both Neovim and terminal mode, including through tmux.
+-- local toggle_key = "<F4>"
+-- local reload_timer
+--
+-- -- -----------------------------------------------------------------------------
+-- -- Live reload
+-- -- -----------------------------------------------------------------------------
+--
+-- -- Claude's acceptEdits mode writes changes directly to disk. Keep Neovim's
+-- -- loaded file buffers in sync while the managed Claude terminal is running.
+-- local function reload_changed_files()
+--   local ok, terminal = pcall(require, "claudecode.terminal")
+--   if not ok or not terminal.get_active_terminal_bufnr() then
+--     return
+--   end
+--
+--   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+--     -- Ignore terminals, help pages, scratch buffers, and unloaded buffers.
+--     local is_file_buffer = vim.api.nvim_buf_is_loaded(bufnr)
+--       and vim.api.nvim_buf_get_name(bufnr) ~= ""
+--       and vim.bo[bufnr].buftype == ""
+--
+--     -- Never overwrite unsaved Neovim edits. :checktime reloads only when the
+--     -- file changed on disk and 'autoread' permits it.
+--     if is_file_buffer and not vim.bo[bufnr].modified then
+--       pcall(vim.cmd, ("silent! checktime %d"):format(bufnr))
+--     end
+--   end
+-- end
+--
+-- local function setup_live_reload()
+--   -- Make :checktime automatically reread clean buffers changed on disk.
+--   vim.opt.autoread = true
+--
+--   -- Avoid duplicate timers if the plugin configuration is reloaded.
+--   if reload_timer then
+--     vim.fn.timer_stop(reload_timer)
+--   end
+--
+--   -- A short polling interval also refreshes visible files while focus remains
+--   -- inside Claude's terminal, where normal editor autocmds do not fire.
+--   reload_timer = vim.fn.timer_start(500, reload_changed_files, { ["repeat"] = -1 })
+--
+--   -- Stop the repeating timer cleanly when Neovim exits.
+--   local group = vim.api.nvim_create_augroup("ClaudeCodeLiveReload", { clear = true })
+--   vim.api.nvim_create_autocmd("VimLeavePre", {
+--     group = group,
+--     once = true,
+--     callback = function()
+--       if reload_timer then
+--         vim.fn.timer_stop(reload_timer)
+--         reload_timer = nil
+--       end
+--     end,
+--   })
+-- end
+--
+-- -- -----------------------------------------------------------------------------
+-- -- Terminal window navigation
+-- -- -----------------------------------------------------------------------------
+--
+-- -- Move directly from Claude's terminal to an adjacent split. Stopping insert
+-- -- first changes Neovim from terminal-input mode to Terminal-Normal mode.
+-- local function move_from_terminal(direction)
+--   vim.cmd("stopinsert")
+--   vim.cmd("wincmd " .. direction)
+-- end
+--
+-- -- -----------------------------------------------------------------------------
+-- -- Explicit context sending
+-- -- -----------------------------------------------------------------------------
+--
+-- -- Send the current visual selection without enabling automatic selection
+-- -- tracking. This avoids continuous WebSocket broadcasts on every visual-mode
+-- -- change while preserving an explicit <leader>as workflow.
+-- local function send_visual_selection()
+--   local tree_filetypes = {
+--     NvimTree = true,
+--     ["neo-tree"] = true,
+--     oil = true,
+--     minifiles = true,
+--     netrw = true,
+--     snacks_picker_list = true,
+--   }
+--
+--   -- Explorer buffers represent files rather than normal text selections.
+--   if tree_filetypes[vim.bo.filetype] then
+--     vim.cmd("ClaudeCodeTreeAdd")
+--     return
+--   end
+--
+--   local file_path = vim.api.nvim_buf_get_name(0)
+--   if file_path == "" then
+--     vim.notify("Cannot send a selection from an unnamed buffer", vim.log.levels.WARN)
+--     return
+--   end
+--
+--   -- Claude's protocol uses zero-indexed, inclusive line numbers.
+--   local start_line, end_line = require("claudecode.visual_commands").get_visual_range()
+--   local sent = require("claudecode").send_at_mention(file_path, start_line - 1, end_line - 1, "ClaudeCodeSend")
+--   if sent then
+--     -- Leave visual mode after the selection has been sent successfully.
+--     local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+--     vim.api.nvim_feedkeys(esc, "i", true)
+--   end
+-- end
+--
+-- -- -----------------------------------------------------------------------------
+-- -- Plugin specification
+-- -- -----------------------------------------------------------------------------
+--
 return {
-  "coder/claudecode.nvim",
-  dependencies = { "folke/snacks.nvim" },
-
-  -- Lazy-load the plugin when any ClaudeCode command is invoked.
-  cmd = {
-    "ClaudeCode",
-    "ClaudeCodeFocus",
-    "ClaudeCodeSelectModel",
-    "ClaudeCodeAdd",
-    "ClaudeCodeSend",
-    "ClaudeCodeSendText",
-    "ClaudeCodeTreeAdd",
-    "ClaudeCodeStatus",
-    "ClaudeCodeStart",
-    "ClaudeCodeStop",
-    "ClaudeCodeOpen",
-    "ClaudeCodeClose",
-    "ClaudeCodeDiffAccept",
-    "ClaudeCodeDiffDeny",
-    "ClaudeCodeCloseAllDiffs",
-  },
-
-  -- Keymaps
-  keys = {
-    { "<leader>a", nil, desc = "AI/Claude Code" },
-
-    -- Session controls
-    { "<leader>ac", "<cmd>ClaudeCode<cr>", mode = { "n", "t" }, desc = "Toggle Claude" },
-    { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
-    { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
-    { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
-    { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
-
-    -- File and selection context
-    { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
-    { "<leader>as", send_visual_selection, mode = "v", desc = "Send to Claude" },
-    { "<leader>as", "<cmd>ClaudeCodeTreeAdd<cr>", ft = "neo-tree", desc = "Add file" },
-
-    -- These apply only when Claude opens a pending manual-review diff.
-    { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
-    { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
-
-    -- Quick focus/hide shortcut outside terminal-input mode.
-    { toggle_key, "<cmd>ClaudeCodeFocus<cr>", mode = { "n", "x" }, desc = "Claude Code" },
-  },
-
-  -- Plugin behavior
-  opts = {
-    -- Start the local IDE server when the plugin loads, but keep editor focus
-    -- after sending context explicitly.
-    auto_start = true,
-    focus_after_send = false,
-
-    -- Automatic tracking caused unstable selection_changed WebSocket traffic;
-    -- explicit selection sending above remains available.
-    track_selection = false,
-
-    -- Terminal layout and behavior
-    terminal = {
-      provider = "snacks",
-
-      -- Keep Claude in a vertical split on the right. It uses 40% normally and
-      -- narrows to 25% while a review diff is displayed.
-      split_side = "right",
-      split_width_percentage = 0.40,
-      diff_split_width_percentage = 0.25,
-      auto_close = true,
-      auto_insert = true,
-
-      -- Run Claude from the current Git root, falling back to Neovim's cwd.
-      cwd_provider = function(ctx)
-        local cwd = ctx.cwd or vim.fn.getcwd()
-        local git_root = require("claudecode.cwd").git_root(ctx.file_dir or cwd)
-        return git_root or cwd
-      end,
-
-      snacks_win_opts = {
-        wo = {
-          -- Reuse Catppuccin's transparent Normal background in the terminal
-          -- while retaining Snacks' title, footer, and separator highlights.
-          winhighlight = "Normal:Normal,NormalNC:Normal,WinBar:SnacksWinBar,WinBarNC:SnacksWinBarNC,FloatTitle:SnacksTitle,FloatFooter:SnacksFooter,WinSeparator:SnacksWinSeparator",
-        },
-        keys = {
-          -- Navigate splits directly without relying on the timing-sensitive
-          -- double-Esc terminal mapping.
-          claude_left = {
-            "<C-h>",
-            function()
-              move_from_terminal("h")
-            end,
-            mode = "t",
-            desc = "Move focus to the left window",
-          },
-          claude_down = {
-            "<C-j>",
-            function()
-              move_from_terminal("j")
-            end,
-            mode = "t",
-            desc = "Move focus to the lower window",
-          },
-          claude_up = {
-            "<C-k>",
-            function()
-              move_from_terminal("k")
-            end,
-            mode = "t",
-            desc = "Move focus to the upper window",
-          },
-          claude_right = {
-            "<C-l>",
-            function()
-              move_from_terminal("l")
-            end,
-            mode = "t",
-            desc = "Move focus to the right window",
-          },
-
-          -- Terminal-input mode needs its own mapping to hide the Claude pane.
-          claude_hide = {
-            toggle_key,
-            function(self)
-              self:hide()
-            end,
-            mode = "t",
-            desc = "Hide Claude",
-          },
-        },
-      },
-    },
-
-    -- Diff layout
-    diff_opts = {
-      -- Stack the original and proposed buffers top/bottom while Claude remains
-      -- in its right-side vertical split.
-      layout = "horizontal",
-      open_in_new_tab = false,
-      keep_terminal_focus = false,
-      auto_resize_terminal = true,
-    },
-  },
-
-  -- A custom config callback is needed to add live reload after normal plugin
-  -- setup; defining one replaces lazy.nvim's automatic setup call.
-  config = function(_, opts)
-    require("claudecode").setup(opts)
-    setup_live_reload()
-  end,
+  --   "coder/claudecode.nvim",
+  --   dependencies = { "folke/snacks.nvim" },
+  --
+  --   -- Lazy-load the plugin when any ClaudeCode command is invoked.
+  --   cmd = {
+  --     "ClaudeCode",
+  --     "ClaudeCodeFocus",
+  --     "ClaudeCodeSelectModel",
+  --     "ClaudeCodeAdd",
+  --     "ClaudeCodeSend",
+  --     "ClaudeCodeSendText",
+  --     "ClaudeCodeTreeAdd",
+  --     "ClaudeCodeStatus",
+  --     "ClaudeCodeStart",
+  --     "ClaudeCodeStop",
+  --     "ClaudeCodeOpen",
+  --     "ClaudeCodeClose",
+  --     "ClaudeCodeDiffAccept",
+  --     "ClaudeCodeDiffDeny",
+  --     "ClaudeCodeCloseAllDiffs",
+  --   },
+  --
+  --   -- Keymaps
+  --   keys = {
+  --     { "<leader>a", nil, desc = "AI/Claude Code" },
+  --
+  --     -- Session controls
+  --     { "<leader>ac", "<cmd>ClaudeCode<cr>", mode = { "n", "t" }, desc = "Toggle Claude" },
+  --     { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+  --     { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+  --     { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+  --     { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
+  --
+  --     -- File and selection context
+  --     { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+  --     { "<leader>as", send_visual_selection, mode = "v", desc = "Send to Claude" },
+  --     { "<leader>as", "<cmd>ClaudeCodeTreeAdd<cr>", ft = "neo-tree", desc = "Add file" },
+  --
+  --     -- These apply only when Claude opens a pending manual-review diff.
+  --     { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+  --     { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+  --
+  --     -- Quick focus/hide shortcut outside terminal-input mode.
+  --     { toggle_key, "<cmd>ClaudeCodeFocus<cr>", mode = { "n", "x" }, desc = "Claude Code" },
+  --   },
+  --
+  --   -- Plugin behavior
+  --   opts = {
+  --     -- Start the local IDE server when the plugin loads, but keep editor focus
+  --     -- after sending context explicitly.
+  --     auto_start = true,
+  --     focus_after_send = false,
+  --
+  --     -- Automatic tracking caused unstable selection_changed WebSocket traffic;
+  --     -- explicit selection sending above remains available.
+  --     track_selection = false,
+  --
+  --     -- Terminal layout and behavior
+  --     terminal = {
+  --       provider = "snacks",
+  --
+  --       -- Keep Claude in a vertical split on the right. It uses 40% normally and
+  --       -- narrows to 25% while a review diff is displayed.
+  --       split_side = "right",
+  --       split_width_percentage = 0.40,
+  --       diff_split_width_percentage = 0.25,
+  --       auto_close = true,
+  --       auto_insert = true,
+  --
+  --       -- Run Claude from the current Git root, falling back to Neovim's cwd.
+  --       cwd_provider = function(ctx)
+  --         local cwd = ctx.cwd or vim.fn.getcwd()
+  --         local git_root = require("claudecode.cwd").git_root(ctx.file_dir or cwd)
+  --         return git_root or cwd
+  --       end,
+  --
+  --       snacks_win_opts = {
+  --         wo = {
+  --           -- Reuse Catppuccin's transparent Normal background in the terminal
+  --           -- while retaining Snacks' title, footer, and separator highlights.
+  --           winhighlight = "Normal:Normal,NormalNC:Normal,WinBar:SnacksWinBar,WinBarNC:SnacksWinBarNC,FloatTitle:SnacksTitle,FloatFooter:SnacksFooter,WinSeparator:SnacksWinSeparator",
+  --         },
+  --         keys = {
+  --           -- Navigate splits directly without relying on the timing-sensitive
+  --           -- double-Esc terminal mapping.
+  --           claude_left = {
+  --             "<C-h>",
+  --             function()
+  --               move_from_terminal("h")
+  --             end,
+  --             mode = "t",
+  --             desc = "Move focus to the left window",
+  --           },
+  --           claude_down = {
+  --             "<C-j>",
+  --             function()
+  --               move_from_terminal("j")
+  --             end,
+  --             mode = "t",
+  --             desc = "Move focus to the lower window",
+  --           },
+  --           claude_up = {
+  --             "<C-k>",
+  --             function()
+  --               move_from_terminal("k")
+  --             end,
+  --             mode = "t",
+  --             desc = "Move focus to the upper window",
+  --           },
+  --           claude_right = {
+  --             "<C-l>",
+  --             function()
+  --               move_from_terminal("l")
+  --             end,
+  --             mode = "t",
+  --             desc = "Move focus to the right window",
+  --           },
+  --
+  --           -- Terminal-input mode needs its own mapping to hide the Claude pane.
+  --           claude_hide = {
+  --             toggle_key,
+  --             function(self)
+  --               self:hide()
+  --             end,
+  --             mode = "t",
+  --             desc = "Hide Claude",
+  --           },
+  --         },
+  --       },
+  --     },
+  --
+  --     -- Diff layout
+  --     diff_opts = {
+  --       -- Stack the original and proposed buffers top/bottom while Claude remains
+  --       -- in its right-side vertical split.
+  --       layout = "horizontal",
+  --       open_in_new_tab = false,
+  --       keep_terminal_focus = false,
+  --       auto_resize_terminal = true,
+  --     },
+  --   },
+  --
+  --   -- A custom config callback is needed to add live reload after normal plugin
+  --   -- setup; defining one replaces lazy.nvim's automatic setup call.
+  --   config = function(_, opts)
+  --     require("claudecode").setup(opts)
+  --     setup_live_reload()
+  --   end,
 }
