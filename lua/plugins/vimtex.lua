@@ -44,19 +44,10 @@ return {
         "Overfull \\hbox",
       }
 
-      -- Change some key mappings. For default key mappings, check :help vimtex-default-mappings.
-      vim.keymap.set("n", "dsm", "<plug>(vimtex-env-delete-math)", { silent = true })
-      vim.keymap.set("n", "csm", "<plug>(vimtex-env-change-math)", { silent = true })
-      vim.keymap.set("n", "tsm", "<plug>(vimtex-env-toggle-math)", { silent = true })
-      vim.keymap.set({ "x", "o" }, "ai", "<plug>(vimtex-am)", { silent = true })
-      vim.keymap.set({ "x", "o" }, "ii", "<plug>(vimtex-im)", { silent = true })
-      vim.keymap.set({ "x", "o" }, "am", "<plug>(vimtex-a$)", { silent = true })
-      vim.keymap.set({ "x", "o" }, "im", "<plug>(vimtex-i$)", { silent = true })
-      vim.keymap.set("n", "<localleader>lw", "<Cmd>VimtexCountWords<CR>", { silent = true })
+      -- Buffer-local mappings and display options live in after/ftplugin/tex.lua.
 
       -- This part is to set the conceal function.
       vim.g.tex_conceal = "abdmg"
-      vim.opt.conceallevel = 2
       vim.g.vimtex_syntax_conceal_disable = 0
       vim.cmd([[ 
       let g:vimtex_syntax_custom_cmds_with_concealed_delims = [ 
@@ -64,20 +55,13 @@ return {
          \ {'name':'underline', 'mathmode':1, 'cchar_open':'⌊', 'cchar_close': '⌋'},
          \]
       ]])
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "tex",
-        callback = function()
-          local conceal_rules = {
-            { "\\\\limits", " " },
-            { "\\\\Longrightarrow", "⟹ " },
-            { "\\\\Longleftarrow", "⟸ " },
-            { "\\\\iff", "⇔" },
-          }
-          for _, rule in ipairs(conceal_rules) do
-            vim.fn.matchadd("Conceal", rule[1], 10, -1, { conceal = rule[2] })
-          end
-        end,
-      })
+      -- Syntax rules stay with the TeX buffer and only conceal commands in math mode.
+      vim.g.vimtex_syntax_custom_cmds = {
+        { name = "limits", mathmode = true, conceal = true, opt = false, arg = false },
+        { name = "Longrightarrow", mathmode = true, concealchar = "⟹" },
+        { name = "Longleftarrow", mathmode = true, concealchar = "⟸" },
+        { name = "iff", mathmode = true, concealchar = "⇔" },
+      }
 
       --This part is used for delete auxiliary files of latex.
       local clean_aux_files = function()
